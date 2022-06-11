@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Link from 'next/link'
 // @mui/material
 import {
   AppBar,
@@ -18,11 +19,10 @@ import AdbIcon from '@mui/icons-material/Adb'
 import Search from '~/components/search'
 import Header from '~/components/header'
 // data.js
-import { pages as pagesApp } from '~/components/appbar/data'
+import { pages as pagesApp } from '~/components/navbar/data'
 import { pages as pagesHeader } from '~/components/header/data'
-import Link from 'next/link'
 
-const ResponsiveAppBar = () => {
+const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null)
 
   const handleOpenNavMenu = (event: any) => {
@@ -144,4 +144,4 @@ const ResponsiveAppBar = () => {
     </AppBar>
   )
 }
-export default ResponsiveAppBar
+export default Navbar

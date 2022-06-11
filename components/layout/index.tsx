@@ -1,9 +1,7 @@
 import { ReactNode } from 'react'
 import Head from 'next/head'
-
-import Appbar from '~/components/appbar'
-import Footer from '~/components/footer'
-
+import Navbar from '~/components/navbar'
+// import Footer from '~/components/footer'
 import { Container } from '@mui/material'
 
 type Props = {
@@ -19,11 +17,11 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Appbar />
+      <Navbar />
       <Container sx={{ mt: 4 }} maxWidth="xl">
         {children}
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
