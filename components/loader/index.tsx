@@ -1,25 +1,22 @@
-import styled from '@emotion/styled'
-import { Grid } from '@mui/material'
-import { TailSpin } from 'react-loader-spinner'
-import theme from '~/src/theme'
+import { Backdrop, CircularProgress } from '@mui/material'
 
-const CustomizedLoader = styled(Grid)`
-  position: absolute;
-  height: 100vh;
-  z-index: 10000;
-  background-color: rgba(0, 0, 0, 0.2);
-`
+interface Props {
+  isLoading: boolean
+}
 
-const Loader = () => {
+const Loader = ({ isLoading }: Props) => {
   return (
-    <CustomizedLoader container alignItems="center" justifyContent="center">
-      <TailSpin
-        height="50"
-        width="50"
-        color={theme.palette.primary.main}
-        ariaLabel="loading-indicator"
-      />
-    </CustomizedLoader>
+    <>
+      <Backdrop
+        sx={{
+          color: '#fff',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   )
 }
 

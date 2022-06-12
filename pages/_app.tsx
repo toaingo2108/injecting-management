@@ -30,7 +30,7 @@ export default function MyApp(props: AppProps) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <div style={{ position: 'relative' }}>
-          {loading && <Loader />}
+          <Loader isLoading={loading} />
           <Component {...pageProps} />
         </div>
       </ThemeProvider>
