@@ -7,27 +7,23 @@ import {
 
 export const pages = [
   {
-    id: 1,
     name: 'Tìm trung tâm',
     icon: <LocationOn fontSize="small" />,
-    link: '/home',
+    link: '/injections/search',
   },
   {
-    id: 2,
     name: 'Đăng ký tiêm',
     icon: <CalendarMonth fontSize="small" />,
-    link: '/about',
+    link: '/injections/register',
   },
   {
-    id: 3,
     name: 'Đặt mua vắc xin',
     icon: <ShoppingCart fontSize="small" />,
-    link: '/blog',
+    link: '/injections/order',
   },
   {
-    id: 4,
     name: 'Tư vấn',
     icon: <ContactSupport fontSize="small" />,
-    link: '/blog',
+    link: '/advise',
   },
 ]
