@@ -23,7 +23,7 @@ const Layout = ({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Navbar />
-      <Container sx={{ mt: 4 }} maxWidth="xl">
+      <Container sx={{ my: 6 }} maxWidth="xl">
         {titlePage && (
           <Typography gutterBottom variant="h5" component="div" mb={4}>
             {titlePage.toUpperCase()}
