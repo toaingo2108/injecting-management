@@ -32,6 +32,7 @@ const Register: NextPage = () => {
     setLoadingRegister(true)
     setTimeout(() => {
       console.log(data)
+      reset()
       setLoadingRegister(false)
     }, 3000)
   }

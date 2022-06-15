@@ -9,7 +9,7 @@ import {
 import { Check, SellOutlined } from '@mui/icons-material'
 import { Vaccine } from '~/model'
 import { useAppDispatch, useAppSelector } from '~/redux/hook'
-import cartVaccinesSlice from '../cartVaccines/cartVaccinesSlice'
+import cartVaccinesSlice from '~/components/cartVaccines/cartVaccinesSlice'
 
 interface Props {
   vaccine: Vaccine

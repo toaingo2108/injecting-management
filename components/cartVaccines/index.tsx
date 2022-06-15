@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material'
 import { BallotOutlined, ClearOutlined } from '@mui/icons-material'
-import cartVaccinesSlice from './cartVaccinesSlice'
+import cartVaccinesSlice from '~/components/cartVaccines/cartVaccinesSlice'
 import vaccineImage from '~/public/img/vaccine.png'
 import Image from 'next/image'
 
