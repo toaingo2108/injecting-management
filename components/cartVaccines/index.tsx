@@ -1,23 +1,24 @@
-import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '~/redux/hook'
 import {
   Button,
   CardActions,
   CardContent,
-  CardMedia,
   Divider,
   Grid,
   IconButton,
   Typography,
 } from '@mui/material'
-import { Vaccine } from '~/model'
 import { BallotOutlined, ClearOutlined } from '@mui/icons-material'
-import { vaccines } from '~/data'
+import cartVaccinesSlice from './cartVaccinesSlice'
+import vaccineImage from '~/public/img/vaccine.png'
+import Image from 'next/image'
 
 const CartVaccines = () => {
-  const [cartVaccines, setCartVaccines] = useState<Vaccine[]>(vaccines)
+  const cartVaccines = useAppSelector((state) => state.cartVaccines.vaccines)
+  const dispatch = useAppDispatch()
 
   const handleDeleteVaccineCart = (id: string) => {
-    setCartVaccines([...cartVaccines.filter((item) => item.id !== id)])
+    dispatch(cartVaccinesSlice.actions.removeVaccineFromCart(id))
   }
 
   return (
@@ -37,7 +38,7 @@ const CartVaccines = () => {
         </Typography>
       </CardContent>
       <Divider />
-      {cartVaccines ? (
+      {cartVaccines.length > 0 ? (
         cartVaccines.map((item, index) => (
           <div key={index}>
             <CardContent>
@@ -80,15 +81,27 @@ const CartVaccines = () => {
           </div>
         ))
       ) : (
-        <CardMedia
-          component="img"
-          height="140"
-          image="~/public/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
-        />
+        <CardContent>
+          <Grid container justifyContent="center" alignItems="center">
+            <Image src={vaccineImage} alt="empty" width={100} height={100} />
+          </Grid>
+          <Typography
+            variant="h5"
+            color="text.secondary"
+            textAlign="center"
+            mt={2}
+          >
+            DANH SÁCH TRỐNG
+          </Typography>
+        </CardContent>
       )}
       <CardActions>
-        <Button variant="contained" fullWidth size="large" disabled>
+        <Button
+          variant="contained"
+          fullWidth
+          size="large"
+          disabled={cartVaccines.length === 0}
+        >
           Đăng ký mũi tiêm
         </Button>
       </CardActions>

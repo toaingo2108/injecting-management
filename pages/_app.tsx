@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import theme from '~/src/theme'
 import { Router } from 'next/router'
 import Loader from '~/components/loader'
+import { Provider } from 'react-redux'
+import { store } from '~/redux/store'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 
@@ -26,14 +28,16 @@ export default function MyApp(props: AppProps) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <div style={{ position: 'relative' }}>
-          <Loader isLoading={loading} />
-          <Component {...pageProps} />
-        </div>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <div style={{ position: 'relative' }}>
+            <Loader isLoading={loading} />
+            <Component {...pageProps} />
+          </div>
+        </ThemeProvider>
+      </Provider>
     </>
   )
 }

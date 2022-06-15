@@ -6,13 +6,29 @@ import {
   Divider,
   Typography,
 } from '@mui/material'
-import { SellOutlined } from '@mui/icons-material'
+import { Check, SellOutlined } from '@mui/icons-material'
 import { Vaccine } from '~/model'
+import { useAppDispatch, useAppSelector } from '~/redux/hook'
+import cartVaccinesSlice from '../cartVaccines/cartVaccinesSlice'
+
 interface Props {
   vaccine: Vaccine
 }
 
 const VaccineItem = ({ vaccine }: Props) => {
+  const cartVaccines = useAppSelector((state) => state.cartVaccines.vaccines)
+  const selected = !!cartVaccines.find((item) => item.id === vaccine.id)
+
+  const dispatch = useAppDispatch()
+
+  const handleAddToCart = (vaccine: Vaccine) => {
+    dispatch(cartVaccinesSlice.actions.addVaccineIntoCart(vaccine))
+  }
+
+  const handleRemoveFromCart = (id: string) => {
+    dispatch(cartVaccinesSlice.actions.removeVaccineFromCart(id))
+  }
+
   return (
     <>
       <CardActionArea>
@@ -51,9 +67,28 @@ const VaccineItem = ({ vaccine }: Props) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="large" fullWidth color="primary" variant="contained">
-          Chọn
-        </Button>
+        {selected ? (
+          <Button
+            size="large"
+            fullWidth
+            color="success"
+            variant="contained"
+            onClick={() => handleRemoveFromCart(vaccine.id)}
+          >
+            Đã chọn
+            <Check sx={{ ml: 1 }} />
+          </Button>
+        ) : (
+          <Button
+            size="large"
+            fullWidth
+            color="primary"
+            variant="contained"
+            onClick={() => handleAddToCart(vaccine)}
+          >
+            Chọn
+          </Button>
+        )}
       </CardActions>
     </>
   )
