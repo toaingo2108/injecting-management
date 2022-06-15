@@ -1,5 +1,5 @@
 export interface Vaccine {
-  id: number
+  id: string
   name: string
   origin: string
   price: string
