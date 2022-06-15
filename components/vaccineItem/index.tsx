@@ -1,7 +1,6 @@
 import {
   Button,
   CardActionArea,
-  CardActions,
   CardContent,
   Divider,
   Typography,
@@ -66,7 +65,8 @@ const VaccineItem = ({ vaccine }: Props) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
+      {/* <CardActions> */}
+      <CardContent>
         {selected ? (
           <Button
             size="large"
@@ -89,7 +89,8 @@ const VaccineItem = ({ vaccine }: Props) => {
             Chọn
           </Button>
         )}
-      </CardActions>
+      </CardContent>
+      {/* </CardActions> */}
     </>
   )
 }

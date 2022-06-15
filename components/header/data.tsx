@@ -14,7 +14,7 @@ export const pages = [
   {
     name: 'Đăng ký tiêm',
     icon: <CalendarMonth fontSize="small" />,
-    link: '/injections/register',
+    link: '/injections/schedule/register',
   },
   {
     name: 'Đặt mua vắc xin',

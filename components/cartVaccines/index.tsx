@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from '~/redux/hook'
 import {
   Button,
-  CardActions,
   CardContent,
   Divider,
   Grid,
@@ -12,6 +11,7 @@ import { BallotOutlined, ClearOutlined } from '@mui/icons-material'
 import cartVaccinesSlice from '~/components/cartVaccines/cartVaccinesSlice'
 import vaccineImage from '~/public/img/vaccine.png'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const CartVaccines = () => {
   const cartVaccines = useAppSelector((state) => state.cartVaccines.vaccines)
@@ -95,16 +95,19 @@ const CartVaccines = () => {
           </Typography>
         </CardContent>
       )}
-      <CardActions>
-        <Button
-          variant="contained"
-          fullWidth
-          size="large"
-          disabled={cartVaccines.length === 0}
-        >
-          Đăng ký mũi tiêm
-        </Button>
-      </CardActions>
+      <CardContent>
+        <Link href="/injections/register">
+          <Button
+            variant="contained"
+            fullWidth
+            color="warning"
+            size="large"
+            disabled={cartVaccines.length === 0}
+          >
+            Đăng ký mũi tiêm
+          </Button>
+        </Link>
+      </CardContent>
     </>
   )
 }

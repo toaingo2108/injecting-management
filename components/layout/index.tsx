@@ -25,7 +25,14 @@ const Layout = ({
       <Navbar />
       <Container sx={{ my: 6 }} maxWidth="xl">
         {titlePage && (
-          <Typography gutterBottom variant="h5" component="div" mb={4}>
+          <Typography
+            gutterBottom
+            variant="h5"
+            color="primary"
+            fontWeight="bold"
+            component="div"
+            mb={4}
+          >
             {titlePage.toUpperCase()}
           </Typography>
         )}

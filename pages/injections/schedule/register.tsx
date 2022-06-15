@@ -17,7 +17,7 @@ import { RestartAlt } from '@mui/icons-material'
 import SaveIcon from '@mui/icons-material/Save'
 import LoadingButton from '@mui/lab/LoadingButton'
 
-const Register: NextPage = () => {
+const ScheduleRegister: NextPage = () => {
   const {
     control,
     handleSubmit,
@@ -362,4 +362,4 @@ const Register: NextPage = () => {
   )
 }
 
-export default Register
+export default ScheduleRegister

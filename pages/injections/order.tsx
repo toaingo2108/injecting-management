@@ -19,7 +19,7 @@ const Order: NextPage = () => {
         >
           {vaccines.map((vaccine) => (
             <Grid key={vaccine.id} item xs={12} md={6} lg={4}>
-              <Paper elevation={24}>
+              <Paper elevation={24} sx={{ borderRadius: 5 }}>
                 <VaccineItem vaccine={vaccine} />
               </Paper>
             </Grid>
@@ -28,7 +28,7 @@ const Order: NextPage = () => {
 
         <Grid item xs={12} lg={4} container alignItems="flex-start">
           <Grid item xs={12}>
-            <Paper elevation={24}>
+            <Paper elevation={24} sx={{ borderRadius: 5 }}>
               <CartVaccines />
             </Paper>
           </Grid>
