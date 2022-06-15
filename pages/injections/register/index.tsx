@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from '~/components/layout'
+import { NextPage } from 'next'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import {
   Box,
@@ -10,10 +10,11 @@ import {
   ToggleButtonGroup,
 } from '@mui/material'
 import dayjs from 'dayjs'
+import Layout from '~/components/layout'
 import ErrorAlert from '~/components/errorAlert'
 import { RegisterInjections } from '~/model'
 
-const Register = () => {
+const Register: NextPage = () => {
   const {
     control,
     handleSubmit,
