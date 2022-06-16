@@ -15,11 +15,13 @@ const cartVaccinesSlice = createSlice({
   reducers: {
     addVaccineIntoCart: (state, action: PayloadAction<Vaccine>) => {
       state.vaccines.push(action.payload)
+      localStorage.setItem('cartVaccines', JSON.stringify(state.vaccines))
     },
     removeVaccineFromCart: (state, action: PayloadAction<string>) => {
       state.vaccines = state.vaccines.filter(
         (item) => item.id !== action.payload
       )
+      localStorage.setItem('cartVaccines', JSON.stringify(state.vaccines))
     },
   },
 })
