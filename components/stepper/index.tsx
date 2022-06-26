@@ -37,8 +37,8 @@ const StepperComponent = ({ steps }: Props) => {
           <Step key={step.label}>
             <StepLabel>{step.label}</StepLabel>
             <StepContent>
-              <Typography>{step.description}</Typography>
-              {step.stepPage}
+              <Typography variant="h5">{step.description}</Typography>
+              <Box p={4}>{step.stepPage}</Box>
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button
