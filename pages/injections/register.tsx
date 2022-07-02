@@ -90,7 +90,7 @@ const Register: NextPage = () => {
       label: 'Bước 2',
       description: 'Xác nhận Gói tiêm, Vắc xin',
       stepPage: (
-        <Grid container spacing={2} justifyContent="flex-end">
+        <Grid container spacing={2}>
           {cartVaccines?.map((vaccine) => (
             <Grid key={vaccine.id} item xs={12} md={6} lg={3}>
               <Paper elevation={24} sx={{ borderRadius: 5 }}>
