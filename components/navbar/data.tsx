@@ -17,7 +17,7 @@ export const pages = [
   },
   {
     name: 'Gói tiêm',
-    link: '/blog',
+    link: '/package',
   },
   {
     name: 'Cẩm nang',

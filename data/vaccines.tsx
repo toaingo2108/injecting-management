@@ -8,8 +8,7 @@ export const vaccines: Vaccine[] = [
     origin: 'MSD (USA)',
     price: 1790000,
     groups: ['Ung thư cổ tử cung'],
-    prevention:
-      'Ung thư cổ tử cung, âm hộ, âm đạo, các tổn thương tiền ung thư và loạn sản, mụn cóc sinh dục và bệnh lý do nhiễm virus HPV',
+    prevention: 'Ung thư cổ tử cung',
   },
   {
     id: uuidv4(),
@@ -17,8 +16,7 @@ export const vaccines: Vaccine[] = [
     origin: 'MSD (USA)',
     price: 1790000,
     groups: ['Ung thư cổ tử cung'],
-    prevention:
-      'Ung thư cổ tử cung, âm hộ, âm đạo, các tổn thương tiền ung thư và loạn sản, mụn cóc sinh dục và bệnh lý do nhiễm virus HPV',
+    prevention: 'Ung thư cổ tử cung',
   },
   {
     id: uuidv4(),
