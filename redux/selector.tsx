@@ -1,5 +1,5 @@
 // import { createSelector } from '@reduxjs/toolkit';
 
-import type { CartVaccinesState } from '~/components/cartVaccines/cartVaccinesSlice'
+import type { CartState } from '~/components/cart/cartSlice'
 
-export const cartVaccinesSelector = (state: CartVaccinesState) => state.vaccines
+export const cartVaccinesSelector = (state: CartState) => state.vaccines

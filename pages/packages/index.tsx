@@ -1,25 +1,31 @@
+import React from 'react'
 import { GetServerSideProps, NextPage } from 'next'
 import { Grid, Paper } from '@mui/material'
 import Layout from '~/components/layout'
-import VaccineItem from '~/components/vaccineItem'
-import Cart from '~/components/cart'
-import { VacXin } from '~/model'
 import { v4 as uuidv4 } from 'uuid'
+import { GoiTiem } from '~/model'
+import Cart from '~/components/cart'
+import GoiTiemItem from '~/components/goiTiemItem'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`http://localhost:5000/api/vac-xin`)
+  const res = await fetch(`http://localhost:5000/api/goi-tiem`)
   const data = await res.json()
-  const dsVacXin: VacXin[] = data.dsVacXin
-  return { props: { dsVacXin } }
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+  const dsGoiTiem: GoiTiem[] = data.dsGoiTiem
+  return { props: { dsGoiTiem } }
 }
 
 interface Props {
-  dsVacXin: VacXin[]
+  dsGoiTiem: GoiTiem[]
 }
 
-const Vaccines: NextPage<Props> = ({ dsVacXin }) => {
+const Package: NextPage<Props> = ({ dsGoiTiem }) => {
   return (
-    <Layout title="Tra cứu vắc xin" titlePage="Thông tin sản phẩm vắc xin">
+    <Layout title="Tra cứu gói tiêm" titlePage="Danh mục gói vắc xin">
       <Grid container spacing={6}>
         <Grid
           item
@@ -29,10 +35,10 @@ const Vaccines: NextPage<Props> = ({ dsVacXin }) => {
           spacing={2}
           alignContent="flex-start"
         >
-          {dsVacXin.map((vaccine) => (
+          {dsGoiTiem.map((goiTiem) => (
             <Grid key={uuidv4()} item xs={12} md={6} lg={4}>
               <Paper elevation={24} sx={{ borderRadius: 5 }}>
-                <VaccineItem vaccine={vaccine} action />
+                <GoiTiemItem goiTiem={goiTiem} action />
               </Paper>
             </Grid>
           ))}
@@ -50,4 +56,4 @@ const Vaccines: NextPage<Props> = ({ dsVacXin }) => {
   )
 }
 
-export default Vaccines
+export default Package

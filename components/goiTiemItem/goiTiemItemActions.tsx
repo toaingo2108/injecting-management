@@ -1,27 +1,26 @@
 import { useAppDispatch, useAppSelector } from '~/redux/hook'
 import cartSlice from '~/components/cart/cartSlice'
 import { Check } from '@mui/icons-material'
-import { VacXin } from '~/model'
+import { GoiTiem } from '~/model'
 import { Box, Button } from '@mui/material'
 
 interface Props {
-  vaccine: VacXin
+  goiTiem: GoiTiem
 }
-
-const VaccineItemActions = ({ vaccine }: Props) => {
-  const cartVaccines = useAppSelector((state) => state.cart.vaccines)
-  const selected = !!cartVaccines.find(
-    (item) => item.MaVacXin === vaccine.MaVacXin
+const GoiTiemItemActions = ({ goiTiem }: Props) => {
+  const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
+  const selected = !!cartGoiTiem.find(
+    (item) => item.MaGoiTiem === goiTiem.MaGoiTiem
   )
 
   const dispatch = useAppDispatch()
 
-  const handleAddToCart = (vaccine: VacXin) => {
-    dispatch(cartSlice.actions.addVaccineIntoCart(vaccine))
+  const handleAddToCart = (goiTiem: GoiTiem) => {
+    dispatch(cartSlice.actions.addGoiTiemIntoCart(goiTiem))
   }
 
-  const handleRemoveFromCart = (MaVacXin: number) => {
-    dispatch(cartSlice.actions.removeVaccineFromCart(MaVacXin))
+  const handleRemoveFromCart = (MaGoiTiem: number) => {
+    dispatch(cartSlice.actions.removeGoiTiemFromCart(MaGoiTiem))
   }
   return (
     <Box mt={2}>
@@ -31,7 +30,7 @@ const VaccineItemActions = ({ vaccine }: Props) => {
           fullWidth
           color="success"
           variant="contained"
-          onClick={() => handleRemoveFromCart(vaccine.MaVacXin)}
+          onClick={() => handleRemoveFromCart(goiTiem.MaGoiTiem)}
         >
           Đã chọn
           <Check sx={{ ml: 1 }} />
@@ -42,7 +41,7 @@ const VaccineItemActions = ({ vaccine }: Props) => {
           fullWidth
           color="primary"
           variant="contained"
-          onClick={() => handleAddToCart(vaccine)}
+          onClick={() => handleAddToCart(goiTiem)}
         >
           Chọn
         </Button>
@@ -51,4 +50,4 @@ const VaccineItemActions = ({ vaccine }: Props) => {
   )
 }
 
-export default VaccineItemActions
+export default GoiTiemItemActions

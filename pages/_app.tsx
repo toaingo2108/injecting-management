@@ -8,6 +8,7 @@ import { Router } from 'next/router'
 import Loader from '~/components/loader'
 import { Provider } from 'react-redux'
 import { store } from '~/redux/store'
+import { Box } from '@mui/material'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 
@@ -32,10 +33,10 @@ export default function MyApp(props: AppProps) {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <div style={{ position: 'relative' }}>
+          <Box position="relative">
             <Loader isLoading={loading} />
             <Component {...pageProps} />
-          </div>
+          </Box>
         </ThemeProvider>
       </Provider>
     </>

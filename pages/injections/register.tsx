@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react'
+// import { SyntheticEvent, useState } from 'react'
 import { NextPage } from 'next'
 import {
   Autocomplete,
@@ -10,8 +10,8 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Tab,
-  Tabs,
+  // Tab,
+  // Tabs,
   TextField,
   Typography,
 } from '@mui/material'
@@ -19,26 +19,27 @@ import Layout from '~/components/layout'
 import StepperComponent from '~/components/stepper'
 import { useAppSelector } from '~/redux/hook'
 import VaccineItem from '~/components/vaccineItem'
-import { Vaccine } from '~/model'
+import { VacXin } from '~/model'
+import { v4 as uuidv4 } from 'uuid'
 
-function totalPriceVaccines(cartVaccines: Vaccine[]) {
+function totalPriceVaccines(cartVaccines: VacXin[]) {
   let total = 0
   for (let vaccine of cartVaccines) {
-    total += vaccine.price
+    total += vaccine.GiaTien
   }
   return total
 }
 
 const Register: NextPage = () => {
-  const cartVaccines = useAppSelector((state) => state.cartVaccines.vaccines)
+  const cartVaccines = useAppSelector((state) => state.cart.vaccines)
   const totalPrice = totalPriceVaccines(cartVaccines)
   // const [isCustomer, setIsCustomer] = useState(false)
 
-  const [tabValue, setTabValue] = useState(2)
+  // const [tabValue, setTabValue] = useState(2)
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
-  }
+  // const handleChange = (event: SyntheticEvent, newValue: number) => {
+  //   setTabValue(newValue)
+  // }
 
   const steps = [
     {
@@ -92,7 +93,7 @@ const Register: NextPage = () => {
       stepPage: (
         <Grid container spacing={2}>
           {cartVaccines?.map((vaccine) => (
-            <Grid key={vaccine.id} item xs={12} md={6} lg={3}>
+            <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
               <Paper elevation={24} sx={{ borderRadius: 5 }}>
                 <VaccineItem vaccine={vaccine} />
               </Paper>
@@ -106,14 +107,14 @@ const Register: NextPage = () => {
       description: 'Chọn loại thanh toán',
       stepPage: (
         <>
-          <Tabs
+          {/* <Tabs
             value={tabValue}
             onChange={handleChange}
             aria-label="disabled tabs example"
           >
             <Tab label="Thanh toán toàn bộ" />
             <Tab label="Thanh toán theo đợt" disabled={totalPrice < 10000000} />
-          </Tabs>
+          </Tabs> */}
         </>
       ),
     },

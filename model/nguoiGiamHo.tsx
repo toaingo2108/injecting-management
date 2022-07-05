@@ -3,5 +3,5 @@ export interface NguoiGiamHo {
   TenNguoiGiamHo: string
   MaPhieuDK: number
   SoDienThoai: string
-  DiaChi: string
+  MoiQuanHe: string
 }

@@ -1,28 +1,26 @@
 import { Box, CardContent, Divider, Typography } from '@mui/material'
 import { SellOutlined } from '@mui/icons-material'
-import { VacXin } from '~/model'
-import VaccineItemActions from '~/components/vaccineItem/vaccineItemActions'
+import { GoiTiem } from '~/model'
 import { useRouter } from 'next/router'
+import GoiTiemItemActions from '~/components/goiTiemItem/goiTiemItemActions'
 
 interface Props {
-  vaccine: VacXin
+  goiTiem: GoiTiem
   action?: boolean
 }
 
-const VaccineItem = ({ vaccine, action }: Props) => {
+const GoiTiemItem = ({ goiTiem, action }: Props) => {
   const router = useRouter()
   return (
     <CardContent>
-      <Box onClick={() => router.push(`/vaccines/${vaccine.MaVacXin}`)}>
+      <Box onClick={() => router.push(`/packages/${goiTiem.MaGoiTiem}`)}>
         <Typography gutterBottom variant="h6" component="div">
-          {vaccine.TenVacXin}
+          {goiTiem.TenGoiTiem}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {vaccine.TenNSX}
+          {goiTiem.MoTa}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {vaccine.MoTa}
-        </Typography>
+
         <Typography
           gutterBottom
           variant="h5"
@@ -36,11 +34,11 @@ const VaccineItem = ({ vaccine, action }: Props) => {
           }}
         >
           <SellOutlined sx={{ marginRight: 1 }} />
-          {vaccine.GiaTien?.toLocaleString() || 0} VNĐ
+          {goiTiem.TongTien?.toLocaleString() || 0} VNĐ
         </Typography>
         <Divider />
         <Typography variant="body1" color="text" mt={2}>
-          Phòng bệnh:
+          Danh sách vắc xin:
         </Typography>
         <Typography
           variant="body2"
@@ -48,12 +46,13 @@ const VaccineItem = ({ vaccine, action }: Props) => {
           mt={1}
           sx={{ height: 50, overflow: 'hidden' }}
         >
-          {vaccine.MoTa}
+          {goiTiem.DSVacXin?.map((vacXin) => vacXin.TenVacXin).join(', ') ||
+            'Chưa có dữ liệu'}
         </Typography>
       </Box>
-      {action && <VaccineItemActions vaccine={vaccine} />}
+      {action && <GoiTiemItemActions goiTiem={goiTiem} />}
     </CardContent>
   )
 }
 
-export default VaccineItem
+export default GoiTiemItem

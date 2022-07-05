@@ -3,5 +3,7 @@ export interface KhachHang {
   TenKhachHang: string
   NgaySinh: string
   SoDienThoai: string
-  GioiTinh: string
+  SoTaiKhoan: string
+  DiaChi: string
+  GioiTinh: 0 | 1
 }

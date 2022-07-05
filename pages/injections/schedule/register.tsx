@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Grid,
+  Paper,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -12,10 +13,56 @@ import {
 import dayjs from 'dayjs'
 import Layout from '~/components/layout'
 import ErrorAlert from '~/components/errorAlert'
-import { RegisterInjections } from '~/model'
+import {
+  KhachHang,
+  NguoiGiamHo,
+  PhieuDKTiem,
+  RegisterInjections,
+} from '~/model'
 import { RestartAlt } from '@mui/icons-material'
 import SaveIcon from '@mui/icons-material/Save'
 import LoadingButton from '@mui/lab/LoadingButton'
+import VaccineItem from '~/components/vaccineItem'
+import { useAppSelector } from '~/redux/hook'
+import { v4 as uuidv4 } from 'uuid'
+import GoiTiemItem from '~/components/goiTiemItem'
+
+const taoKhachHang = async (khachHang: KhachHang) => {
+  const res = await fetch('http://localhost:5000/api/khach-hang', {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(khachHang),
+  })
+  const data = await res.json()
+  return data.khachHang
+}
+const taoPhieuDKTiem = async (phieuDKTiem: PhieuDKTiem) => {
+  const res = await fetch('http://localhost:5000/api/phieu-dk-tiem', {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(phieuDKTiem),
+  })
+  const data = await res.json()
+  return data.phieuDKTiem
+}
+const taoNguoiGiamHo = async (nguoiGiamHo: NguoiGiamHo) => {
+  const res = await fetch('http://localhost:5000/api/nguoi-giam-ho', {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(nguoiGiamHo),
+  })
+  const data = await res.json()
+  return data.nguoiGiamHo
+}
 
 const ScheduleRegister: NextPage = () => {
   const {
@@ -30,14 +77,33 @@ const ScheduleRegister: NextPage = () => {
 
   const onSubmit: SubmitHandler<RegisterInjections> = async (data) => {
     setLoadingRegister(true)
-    setTimeout(() => {
-      console.log(data)
-      reset()
-      setLoadingRegister(false)
-    }, 3000)
+    const khachHang: KhachHang = await taoKhachHang(data.khachHang)
+
+    if (khachHang) {
+      data.phieuDKTiem = {
+        ...data.phieuDKTiem,
+        MaKhachHang: khachHang.MaKhachHang,
+      }
+      const phieuDKTiem: PhieuDKTiem = await taoPhieuDKTiem(data.phieuDKTiem)
+      if (phieuDKTiem) {
+        data.nguoiGiamHo = {
+          ...data.nguoiGiamHo,
+          MaPhieuDK: phieuDKTiem.MaPhieuDK,
+        }
+        const nguoiGiamHo: NguoiGiamHo = await taoNguoiGiamHo(data.nguoiGiamHo)
+        if (nguoiGiamHo) {
+          alert('THÀNH CÔNG')
+        }
+      }
+    }
+    reset()
+    setLoadingRegister(false)
   }
 
   let yourDate = dayjs(new Date()).format('YYYY-MM-DD')
+
+  const cartVaccines = useAppSelector((state) => state.cart.vaccines)
+  const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
 
   return (
     <Layout title="Đăng ký thông tin tiêm chủng" titlePage="Đăng ký tiêm chủng">
@@ -51,13 +117,13 @@ const ScheduleRegister: NextPage = () => {
           <Grid item container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Controller
-                name="name"
+                name="khachHang.TenKhachHang"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
-                      {...register('name', {
+                      {...register('khachHang.TenKhachHang', {
                         validate: (value) => value !== '',
                       })}
                       size="small"
@@ -66,7 +132,9 @@ const ScheduleRegister: NextPage = () => {
                       // required
                       {...field}
                     />
-                    {errors.name && <ErrorAlert message="Vui lòng điền tên" />}
+                    {errors.khachHang?.TenKhachHang && (
+                      <ErrorAlert message="Vui lòng điền tên" />
+                    )}
                   </Grid>
                 )}
               />
@@ -74,7 +142,7 @@ const ScheduleRegister: NextPage = () => {
 
             <Grid item xs={12} sm={6}>
               <Controller
-                name="birthday"
+                name="khachHang.NgaySinh"
                 control={control}
                 defaultValue={yourDate}
                 render={({ field }) => (
@@ -93,9 +161,9 @@ const ScheduleRegister: NextPage = () => {
 
             <Grid item xs={12}>
               <Controller
-                name="gender"
+                name="khachHang.GioiTinh"
                 control={control}
-                defaultValue="male"
+                defaultValue={0}
                 render={({ field }) => (
                   <Grid item container direction="row">
                     <ToggleButtonGroup
@@ -104,8 +172,8 @@ const ScheduleRegister: NextPage = () => {
                       exclusive
                       color="primary"
                     >
-                      <ToggleButton value="male">Nam</ToggleButton>
-                      <ToggleButton value="female">Nữ</ToggleButton>
+                      <ToggleButton value={0}>Nam</ToggleButton>
+                      <ToggleButton value={1}>Nữ</ToggleButton>
                     </ToggleButtonGroup>
                   </Grid>
                 )}
@@ -116,22 +184,22 @@ const ScheduleRegister: NextPage = () => {
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={12} sm={4}>
               <Controller
-                name="province"
+                name="khachHang.SoTaiKhoan"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
                       size="small"
-                      label="Tỉnh thành"
-                      {...register('province', {
+                      label="Số tài khoản"
+                      {...register('khachHang.SoTaiKhoan', {
                         validate: (value) => value !== '',
                       })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.province && (
-                      <ErrorAlert message="Vui lòng chọn tỉnh thành" />
+                    {errors.khachHang?.SoTaiKhoan && (
+                      <ErrorAlert message="Vui lòng điền số tài khoản" />
                     )}
                   </Grid>
                 )}
@@ -140,46 +208,22 @@ const ScheduleRegister: NextPage = () => {
 
             <Grid item xs={12} sm={4}>
               <Controller
-                name="district"
+                name="khachHang.SoDienThoai"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
                       size="small"
-                      label="Quận huyện"
-                      {...register('district', {
+                      label="Số điện thoại"
+                      {...register('khachHang.SoDienThoai', {
                         validate: (value) => value !== '',
                       })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.district && (
-                      <ErrorAlert message="Vui lòng chọn quận huyện" />
-                    )}
-                  </Grid>
-                )}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name="ward"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <Grid container direction="column">
-                    <TextField
-                      size="small"
-                      label="Phường xã"
-                      {...register('ward', {
-                        validate: (value) => value !== '',
-                      })}
-                      variant="outlined"
-                      {...field}
-                    />
-                    {errors.ward && (
-                      <ErrorAlert message="Vui lòng chọn phường xã" />
+                    {errors.khachHang?.SoDienThoai && (
+                      <ErrorAlert message="Vui lòng điền số điện thoại" />
                     )}
                   </Grid>
                 )}
@@ -188,22 +232,22 @@ const ScheduleRegister: NextPage = () => {
 
             <Grid item xs={12}>
               <Controller
-                name="address"
+                name="khachHang.DiaChi"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
                       size="small"
-                      label="Số nhà, tên đường"
-                      {...register('address', {
+                      label="Địa chỉ"
+                      {...register('khachHang.DiaChi', {
                         validate: (value) => value !== '',
                       })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.address && (
-                      <ErrorAlert message="Vui lòng điền số nhà, tên đường" />
+                    {errors.khachHang?.DiaChi && (
+                      <ErrorAlert message="Vui lòng nhập địa chỉ" />
                     )}
                   </Grid>
                 )}
@@ -214,22 +258,22 @@ const ScheduleRegister: NextPage = () => {
           <Grid item xs={12} container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Controller
-                name="contactName"
+                name="nguoiGiamHo.TenNguoiGiamHo"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
                       size="small"
-                      label="Họ tên người liên hệ"
-                      {...register('contactName', {
+                      label="Họ tên người giám hộ"
+                      {...register('nguoiGiamHo.TenNguoiGiamHo', {
                         validate: (value) => value !== '',
                       })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.contactName && (
-                      <ErrorAlert message="Vui lòng điền tên người liên hệ" />
+                    {errors.nguoiGiamHo?.TenNguoiGiamHo && (
+                      <ErrorAlert message="Vui lòng điền tên người giám hộ" />
                     )}
                   </Grid>
                 )}
@@ -238,7 +282,7 @@ const ScheduleRegister: NextPage = () => {
 
             <Grid item xs={12} sm={6}>
               <Controller
-                name="contactRelationship"
+                name="nguoiGiamHo.MoiQuanHe"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -246,13 +290,13 @@ const ScheduleRegister: NextPage = () => {
                     <TextField
                       size="small"
                       label="Mối quan hệ với người tiêm"
-                      {...register('contactRelationship', {
+                      {...register('nguoiGiamHo.MoiQuanHe', {
                         validate: (value) => value !== '',
                       })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.contactRelationship && (
+                    {errors.nguoiGiamHo?.MoiQuanHe && (
                       <ErrorAlert message="Vui lòng điền mối quan hệ với người tiêm" />
                     )}
                   </Grid>
@@ -262,22 +306,22 @@ const ScheduleRegister: NextPage = () => {
 
             <Grid item xs={12} sm={6}>
               <Controller
-                name="contactPhone"
+                name="nguoiGiamHo.SoDienThoai"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
                       size="small"
-                      label="Số điện thoại người liên hệ"
-                      {...register('contactPhone', {
+                      label="Số điện thoại người giám hộ"
+                      {...register('nguoiGiamHo.SoDienThoai', {
                         validate: (value) => value !== '',
                       })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.contactPhone && (
-                      <ErrorAlert message="Vui lòng điền số điện thoại" />
+                    {errors.nguoiGiamHo?.SoDienThoai && (
+                      <ErrorAlert message="Vui lòng điền số điện thoại người giám hộ" />
                     )}
                   </Grid>
                 )}
@@ -285,30 +329,9 @@ const ScheduleRegister: NextPage = () => {
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
-            <Controller
-              name="typeInjection"
-              control={control}
-              defaultValue="package"
-              render={({ field }) => (
-                <Grid container direction="column">
-                  <ToggleButtonGroup
-                    size="small"
-                    exclusive
-                    color="primary"
-                    {...field}
-                  >
-                    <ToggleButton value="package">Vắc xin gói</ToggleButton>
-                    <ToggleButton value="odd">Vắc xin lẻ</ToggleButton>
-                  </ToggleButtonGroup>
-                </Grid>
-              )}
-            />
-          </Grid>
-
           <Grid item xs={12} sm={6}>
             <Controller
-              name="dateOfInjection"
+              name="phieuDKTiem.NgayLap"
               control={control}
               defaultValue={yourDate}
               render={({ field }) => (
@@ -316,14 +339,36 @@ const ScheduleRegister: NextPage = () => {
                   <TextField
                     type="date"
                     size="small"
-                    label="Ngày mong muốn tiêm"
+                    label="Ngày lập"
                     variant="outlined"
+                    disabled
                     {...field}
                   />
                 </Grid>
               )}
             />
           </Grid>
+
+          <Grid item xs={12} container spacing={2}>
+            {cartVaccines?.map((vaccine) => (
+              <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
+                <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                  <VaccineItem vaccine={vaccine} />
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+
+          <Grid item xs={12} container spacing={2}>
+            {cartGoiTiem?.map((goiTiem) => (
+              <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
+                <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                  <GoiTiemItem goiTiem={goiTiem} />
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+
           <Grid item container justifyContent="flex-end" spacing={1}>
             <Grid item xs={12} sm={2}>
               <Button

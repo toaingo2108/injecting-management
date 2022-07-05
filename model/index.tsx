@@ -1,9 +1,6 @@
 // FORM MODEL
 export * from '~/model/form/registerInjections'
 
-// OBJECT MODEL DEMO
-export * from '~/model/vaccine'
-
 // OBJECT MODEL
 export * from '~/model/chiTietPhieuDK'
 export * from '~/model/dotThanhToan'

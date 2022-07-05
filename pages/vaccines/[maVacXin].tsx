@@ -2,34 +2,29 @@ import { GetServerSideProps, NextPage } from 'next'
 import { Grid, Paper, Typography } from '@mui/material'
 import Layout from '~/components/layout'
 import VaccineItem from '~/components/vaccineItem'
-import { vaccines } from '~/data'
-import { Vaccine } from '~/model'
 import Image from 'next/image'
+import { VacXin } from '~/model'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maVacXin = ctx.params?.maVacXin
-
-  // const res = await fetch(`https://localhost:3000/api/`)
-  // const data = await res.json()
-
-  if (!maVacXin) {
+  const res = await fetch(`http://localhost:5000/api/vac-xin/${maVacXin}`)
+  const data = await res.json()
+  if (!data) {
     return {
       notFound: true,
     }
   }
-
-  return {
-    props: { vacXin: vaccines[0] }, // will be passed to the page component as props
-  }
+  const vacXin: VacXin = data.vacXin
+  return { props: { vacXin } }
 }
 
 interface Props {
-  vacXin: Vaccine
+  vacXin: VacXin
 }
 
 const VaccineDetail: NextPage<Props> = ({ vacXin }) => {
   return (
-    <Layout title="Thông tin vắc xin">
+    <Layout title={`Thông tin chi tiết vắc xin ${vacXin.TenVacXin}`}>
       <Grid container spacing={4}>
         <Grid item xs={3}>
           <Paper elevation={24} sx={{ borderRadius: 5 }}>
@@ -38,12 +33,12 @@ const VaccineDetail: NextPage<Props> = ({ vacXin }) => {
         </Grid>
         <Grid item xs={8}>
           <Typography variant="h6" textTransform="uppercase" color="primary">
-            MÔ TẢ THÔNG TIN VẮC XIN: {vacXin.name}
+            MÔ TẢ THÔNG TIN VẮC XIN: {vacXin.TenVacXin}
           </Typography>
           <Typography variant="body2" my={2}>
-            Phòng chống: {vacXin.prevention}
+            Phòng chống: {vacXin.MoTa}
           </Typography>
-          <Typography variant="body2">Nguồn gốc: {vacXin.origin}</Typography>
+          <Typography variant="body2">Nguồn gốc: {vacXin.TenNSX}</Typography>
           <Image
             src="https://lh5.googleusercontent.com/vo_49lXT-w6F-fOUrPo1WFOglAlAzBLNsPhxkgmu8S_f70dpzIFEpSgP1fQxOWwRWwdf8ryUqr4uh8Yqo_jyBfbzfc62ZHkwKyq_bAPoQaGLat_N9N0lR-4ZvXQAOI3WbdQME-5B"
             alt="vaccineImage"
