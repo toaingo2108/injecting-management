@@ -23,7 +23,6 @@ interface Props {
   phieuDKTiem: PhieuDKTiem
 }
 const SheetDetail: NextPage<Props> = ({ phieuDKTiem }) => {
-  console.log(phieuDKTiem)
   return (
     <Layout title="Thông tin phiếu đăng ký tiêm">
       <Grid container spacing={6}>

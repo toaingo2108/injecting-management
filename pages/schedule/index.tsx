@@ -47,7 +47,6 @@ const Schedule: NextPage<Props> = ({ dsLichLamViec }) => {
 
   const onSubmit: SubmitHandler<LichLamViec> = async (data) => {
     setLoadingRegister(true)
-    console.log(data)
     await taoLichLamViec(data)
     reset()
     router.reload()

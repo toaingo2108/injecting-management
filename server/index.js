@@ -24,6 +24,7 @@ app.use('/api/lich-lam-viec', lichLamViecRouter)
 app.use('/api/nguoi-giam-ho', nguoiGiamHoRouter)
 app.use('/api/nhan-vien', nhanVienRouter)
 app.use('/api/nhan-vien-lich-lam-viec', nhanVienLichLamViecRouter)
+app.use('/api/phieu-dk-tiem', phieuDKTiemRouter)
 app.use('/api/vac-xin', vacXinRouter)
 
 const PORT = process.env.PORT || 5000

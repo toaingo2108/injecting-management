@@ -4,13 +4,14 @@ const sql = require('mssql')
 const config = require('../config')
 
 router.post('/', async (req, res) => {
-  const { TenNguoiGiamHo, MaPhieuDK, SoDienThoai, MoiQuanHe } = req.body
+  const { TenNguoiGiamHo, MaKhachHang, MaPhieuDK, SoDienThoai, MoiQuanHe } =
+    req.body
   try {
     let pool = await sql.connect(config)
     const { recordset, output } = await pool.query(
-      `insert into NguoiGiamHo (TenNguoiGiamHo, MaPhieuDK, SoDienThoai, MoiQuanHe)
+      `insert into NguoiGiamHo (TenNguoiGiamHo, MaKhachHang, MaPhieuDK, SoDienThoai, MoiQuanHe)
         output inserted.*
-        values (N'${TenNguoiGiamHo}', ${MaPhieuDK}, '${SoDienThoai}', N'${MoiQuanHe}')`
+        values (N'${TenNguoiGiamHo}', ${MaKhachHang}, ${MaPhieuDK}, '${SoDienThoai}', N'${MoiQuanHe}')`
     )
     if (output.error) {
       return res.status(400).json({

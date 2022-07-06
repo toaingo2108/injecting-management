@@ -52,6 +52,7 @@ const ScheduleRegister: NextPage = () => {
       if (phieuDKTiem) {
         data.nguoiGiamHo = {
           ...data.nguoiGiamHo,
+          MaKhachHang: khachHang.MaKhachHang,
           MaPhieuDK: phieuDKTiem.MaPhieuDK,
         }
         const nguoiGiamHo: NguoiGiamHo = await taoNguoiGiamHo(data.nguoiGiamHo)
@@ -194,7 +195,7 @@ const ScheduleRegister: NextPage = () => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={4}>
               <Controller
                 name="khachHang.DiaChi"
                 control={control}
@@ -293,24 +294,44 @@ const ScheduleRegister: NextPage = () => {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name="phieuDKTiem.NgayLap"
-              control={control}
-              defaultValue={yourDate}
-              render={({ field }) => (
-                <Grid container direction="column">
-                  <TextField
-                    type="date"
-                    size="small"
-                    label="Ngày lập"
-                    variant="outlined"
-                    disabled
-                    {...field}
-                  />
-                </Grid>
-              )}
-            />
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="phieuDKTiem.KetQuaKhamSL"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <Grid container direction="column">
+                    <TextField
+                      size="small"
+                      label="Kết quả khám sàn lọc"
+                      variant="outlined"
+                      {...field}
+                    />
+                  </Grid>
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="phieuDKTiem.NgayLap"
+                control={control}
+                defaultValue={yourDate}
+                render={({ field }) => (
+                  <Grid container direction="column">
+                    <TextField
+                      type="date"
+                      size="small"
+                      label="Ngày lập"
+                      variant="outlined"
+                      disabled
+                      {...field}
+                    />
+                  </Grid>
+                )}
+              />
+            </Grid>
           </Grid>
 
           <Grid item xs={12} container spacing={2}>

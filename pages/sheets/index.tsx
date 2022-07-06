@@ -22,7 +22,6 @@ interface Props {
   dsPhieuDKTiem: PhieuDKTiem[]
 }
 const Sheets: NextPage<Props> = ({ dsPhieuDKTiem }) => {
-  console.log(dsPhieuDKTiem)
   return (
     <Layout
       title="Phiếu đăng ký tiêm chủng"

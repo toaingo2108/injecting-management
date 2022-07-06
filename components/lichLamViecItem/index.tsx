@@ -1,6 +1,7 @@
 import { Box, CardContent, Divider, Typography } from '@mui/material'
 import { LichLamViec } from '~/model'
 import LichLamViecItemActions from '~/components/lichLamViecItem/lichLamViecItemActions'
+import dayjs from 'dayjs'
 
 interface Props {
   lichLamViec: LichLamViec
@@ -8,12 +9,6 @@ interface Props {
 }
 
 const LichLamViecItem = ({ lichLamViec, action }: Props) => {
-  const date = new Date(lichLamViec.Ngay)
-  const ngayLamViec = `${
-    date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
-  }-${
-    date.getMonth() < 10 ? '0' + date.getMonth() : date.getMonth()
-  }-${date.getFullYear()}`
   return (
     <CardContent>
       <Box>
@@ -21,7 +16,7 @@ const LichLamViecItem = ({ lichLamViec, action }: Props) => {
           Mã lịch: {lichLamViec.MaLich}
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Ngày: {ngayLamViec}
+          Ngày: {dayjs(lichLamViec.Ngay).format('DD-MM-YYYY')}
         </Typography>
 
         <Divider />
