@@ -12,6 +12,7 @@ import {
 import Layout from '~/components/layout'
 import { GoiTiem } from '~/model'
 import { v4 as uuidv4 } from 'uuid'
+import { rowsGoiTiem, tongSoLieuGoiTiem } from '~/src/utils'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maGoiTiem = ctx.params?.maGoiTiem
@@ -28,24 +29,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 interface Props {
   goiTiem: GoiTiem
-}
-
-const rows = (goiTiem: GoiTiem) => {
-  return goiTiem.DSVacXin.map((vacxin, index) => ({
-    id: index + 1,
-    prevention: vacxin.MoTa,
-    name: vacxin.TenVacXin,
-    origin: vacxin.TenNSX,
-    soLuong: vacxin.SoLuong,
-  }))
-}
-
-const tongSoLieu = (goiTiem: GoiTiem) => {
-  let total = 0
-  for (let item of goiTiem.DSVacXin) {
-    total = total + item.SoLuong
-  }
-  return total
 }
 
 const GoiTiemDetail: NextPage<Props> = ({ goiTiem }) => {
@@ -66,7 +49,7 @@ const GoiTiemDetail: NextPage<Props> = ({ goiTiem }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows(goiTiem).map((row, index) => (
+            {rowsGoiTiem(goiTiem).map((row, index) => (
               <TableRow key={uuidv4()}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{row.prevention}</TableCell>
@@ -79,7 +62,7 @@ const GoiTiemDetail: NextPage<Props> = ({ goiTiem }) => {
               <TableCell colSpan={4} align="center">
                 Tổng số liều
               </TableCell>
-              <TableCell align="center">{tongSoLieu(goiTiem)}</TableCell>
+              <TableCell align="center">{tongSoLieuGoiTiem(goiTiem)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={4} align="center">

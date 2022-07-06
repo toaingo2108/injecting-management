@@ -3,14 +3,14 @@ export const pages = [
     name: 'Trang chủ',
     link: '/',
   },
-  // {
-  //   name: 'Giới thiệu',
-  //   link: '/about',
-  // },
-  // {
-  //   name: 'Tiêm chủng cho trẻ em',
-  //   link: '/blog',
-  // },
+  {
+    name: 'Lịch làm việc',
+    link: '/schedule',
+  },
+  {
+    name: 'Phiếu đăng ký tiêm chủng',
+    link: '/sheets',
+  },
   // {
   //   name: 'Tiêm chủng cho người lớn',
   //   link: '/blog',

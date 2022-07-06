@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '~/redux/hook'
 import {
+  Box,
   Button,
   CardContent,
   Divider,
@@ -12,6 +13,7 @@ import cartSlice from '~/components/cart/cartSlice'
 import vaccineImage from '~/public/img/vaccine.png'
 import Image from 'next/image'
 import Link from 'next/link'
+import { v4 as uuidv4 } from 'uuid'
 
 const Cart = () => {
   const cartVaccines = useAppSelector((state) => state.cart.vaccines)
@@ -43,10 +45,24 @@ const Cart = () => {
       </CardContent>
       <Divider />
 
-      {cartVaccines.length > 0 || cartVaccines.length > 0 ? (
+      {cartVaccines.length === 0 && cartGoiTiem.length === 0 ? (
+        <CardContent>
+          <Grid container justifyContent="center" alignItems="center">
+            <Image src={vaccineImage} alt="empty" width={100} height={100} />
+          </Grid>
+          <Typography
+            variant="h5"
+            color="text.secondary"
+            textAlign="center"
+            mt={2}
+          >
+            DANH SÁCH TRỐNG
+          </Typography>
+        </CardContent>
+      ) : (
         <>
-          {cartVaccines.map((item, index) => (
-            <div key={index}>
+          {cartVaccines.map((item) => (
+            <Box key={uuidv4()}>
               <CardContent>
                 <Grid container>
                   <Grid item xs={10}>
@@ -86,10 +102,10 @@ const Cart = () => {
                 </Grid>
               </CardContent>
               <Divider />
-            </div>
+            </Box>
           ))}
-          {cartGoiTiem?.map((item, index) => (
-            <div key={index}>
+          {cartGoiTiem?.map((item) => (
+            <Box key={uuidv4()}>
               <CardContent>
                 <Grid container>
                   <Grid item xs={10}>
@@ -132,28 +148,14 @@ const Cart = () => {
                 </Grid>
               </CardContent>
               <Divider />
-            </div>
+            </Box>
           ))}
         </>
-      ) : (
-        <CardContent>
-          <Grid container justifyContent="center" alignItems="center">
-            <Image src={vaccineImage} alt="empty" width={100} height={100} />
-          </Grid>
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            textAlign="center"
-            mt={2}
-          >
-            DANH SÁCH TRỐNG
-          </Typography>
-        </CardContent>
       )}
       <CardContent>
         <Grid container direction="column" spacing={2}>
           <Grid item>
-            <Link href="/injections/register">
+            <Link href="/injections/order">
               <Button
                 variant="contained"
                 fullWidth
@@ -166,7 +168,7 @@ const Cart = () => {
             </Link>
           </Grid>
           <Grid item>
-            <Link href="/injections/schedule/register">
+            <Link href="/injections/register">
               <Button
                 variant="contained"
                 fullWidth

@@ -8,8 +8,8 @@ import {
   Paper,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
-import Link from 'next/link'
+import { MouseEventHandler, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 interface Props {
   steps: {
@@ -17,9 +17,11 @@ interface Props {
     description: string
     stepPage: JSX.Element
   }[]
+  finalActionTitle: string
+  finalAction: MouseEventHandler<HTMLButtonElement>
 }
 
-const StepperComponent = ({ steps }: Props) => {
+const StepperComponent = ({ steps, finalActionTitle, finalAction }: Props) => {
   const [activeStep, setActiveStep] = useState(0)
 
   const handleNext = () => {
@@ -34,7 +36,7 @@ const StepperComponent = ({ steps }: Props) => {
     <>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
-          <Step key={step.label}>
+          <Step key={uuidv4()}>
             <StepLabel>{step.label}</StepLabel>
             <StepContent>
               <Typography variant="h5">{step.description}</Typography>
@@ -63,9 +65,9 @@ const StepperComponent = ({ steps }: Props) => {
       </Stepper>
       {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
-          <Link href="/">
-            <Button sx={{ mt: 1, mr: 1 }}>Trang chủ</Button>
-          </Link>
+          <Button sx={{ mt: 1, mr: 1 }} onClick={finalAction}>
+            {finalActionTitle}
+          </Button>
         </Paper>
       )}
     </>

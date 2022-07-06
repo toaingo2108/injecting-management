@@ -1,0 +1,73 @@
+###
+GET http://localhost:5000/api/goi-tiem
+
+###
+GET http://localhost:5000/api/vac-xin
+
+###
+GET http://localhost:5000/api/vac-xin/3
+
+
+### 
+POST http://localhost:5000/api/khach-hang
+Content-Type: application/json
+
+{
+    "TenKhachHang": "1",
+    "NgaySinh": "2022-07-25",
+    "SoDienThoai": "1234567891",
+    "SoTaiKhoan": "1",
+    "DiaChi": "1",
+    "GioiTinh": 1
+}
+
+### 
+POST http://localhost:5000/api/phieu-dk-tiem
+Content-Type: application/json
+
+{
+    "MaKhachHang": 8,
+    "NgayLap": "2022-07-25"
+}
+
+### 
+POST http://localhost:5000/api/nguoi-giam-ho
+Content-Type: application/json
+
+{
+    "TenNguoiGiamHo" : "a", 
+    "MaPhieuDK" : 1, 
+    "SoDienThoai" : "1231231231", 
+    "MoiQuanHe" : "Mẹ" 
+}
+
+### 
+POST http://localhost:5000/api/dk-lich-lam-viec
+Content-Type: application/json
+
+{
+    "MaLich": 1,
+    "MaNhanVien": 3
+}
+
+### 
+POST http://localhost:5000/api/lich-lam-viec
+Content-Type: application/json
+
+{
+    "Ngay": "2022-07-08",
+    "Ca": 2
+}
+
+###
+GET http://localhost:5000/api/lich-lam-viec
+
+###
+GET http://localhost:5000/api/nhan-vien-chua-dk-lich/1
+
+###
+GET http://localhost:5000/api/nhan-vien-dk-lich/1
+
+###
+GET http://localhost:5000/api/phieu-dang-ky
+
