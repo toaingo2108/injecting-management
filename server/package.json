@@ -1,12 +1,16 @@
 {
-  "name": "be_pttk",
+  "name": "server",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "dev": "nodemon index"
+    "server": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "MIT",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -14,6 +18,6 @@
     "mssql": "^8.1.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.18"
+    "nodemon": "^2.0.19"
   }
 }
