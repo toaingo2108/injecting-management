@@ -4,10 +4,11 @@ import Layout from '~/components/layout'
 import VaccineItem from '~/components/vaccineItem'
 import Image from 'next/image'
 import { VacXin } from '~/model'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maVacXin = ctx.params?.maVacXin
-  const res = await fetch(`http://localhost:5000/api/vac-xin/${maVacXin}`)
+  const res = await fetch(`${apiUrl}/vac-xin/${maVacXin}`)
   const data = await res.json()
   if (!data) {
     return {

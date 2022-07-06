@@ -13,10 +13,11 @@ import Layout from '~/components/layout'
 import { GoiTiem } from '~/model'
 import { v4 as uuidv4 } from 'uuid'
 import { rowsGoiTiem, tongSoLieuGoiTiem } from '~/src/utils'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maGoiTiem = ctx.params?.maGoiTiem
-  const res = await fetch(`http://localhost:5000/api/goi-tiem/${maGoiTiem}`)
+  const res = await fetch(`${apiUrl}/goi-tiem/${maGoiTiem}`)
   const data = await res.json()
   if (!data) {
     return {

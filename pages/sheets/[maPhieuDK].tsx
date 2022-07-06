@@ -3,12 +3,11 @@ import { GetServerSideProps, NextPage } from 'next'
 import Layout from '~/components/layout'
 import PhieuDKTiemItem from '~/components/phieuDKTiemItem'
 import { PhieuDKTiem } from '~/model'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maPhieuDK = ctx.params?.maPhieuDK
-  const res = await fetch(
-    `http://localhost:5000/api/phieu-dk-tiem/${maPhieuDK}`
-  )
+  const res = await fetch(`${apiUrl}/phieu-dk-tiem/${maPhieuDK}`)
   const data = await res.json()
   if (!data) {
     return {

@@ -22,10 +22,11 @@ import MyModal from '~/components/modal'
 import { useAppDispatch } from '~/redux/hook'
 import modalSlice from '~/components/modal/modalSlice'
 import { dkLichLamViec } from '~/src/utils'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maLich = ctx.params?.maLich
-  const res = await fetch(`http://localhost:5000/api/lich-lam-viec/${maLich}`)
+  const res = await fetch(`${apiUrl}/lich-lam-viec/${maLich}`)
   const data = await res.json()
   if (!data) {
     return {
@@ -35,12 +36,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const lichLamViec: LichLamViec = data.lichLamViec
 
   const dataNhanVien = await fetch(
-    `http://localhost:5000/api/nhan-vien/dk-lich/${lichLamViec.MaLich}`
+    `${apiUrl}/nhan-vien/dk-lich/${lichLamViec.MaLich}`
   ).then((data) => data.json())
   const dsNhanVien: NhanVien[] = dataNhanVien.dsNhanVien
 
   const dataNhanVienChuaDK = await fetch(
-    `http://localhost:5000/api/nhan-vien/chua-dk-lich/${lichLamViec.MaLich}`
+    `${apiUrl}/nhan-vien/chua-dk-lich/${lichLamViec.MaLich}`
   ).then((data) => data.json())
   const dsNhanVienChuaDK: NhanVien[] = dataNhanVienChuaDK.dsNhanVien
 

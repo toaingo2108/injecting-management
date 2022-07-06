@@ -6,6 +6,7 @@ import {
   PhieuDKTiem,
   VacXin,
 } from '~/model'
+import { apiUrl } from './constants'
 
 export const totalPriceCart = (
   cartVaccines: VacXin[],
@@ -22,7 +23,7 @@ export const totalPriceCart = (
 }
 
 export const taoKhachHang = async (khachHang: KhachHang) => {
-  const res = await fetch('http://localhost:5000/api/khach-hang', {
+  const res = await fetch(`${apiUrl}/khach-hang`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -35,7 +36,7 @@ export const taoKhachHang = async (khachHang: KhachHang) => {
 }
 
 export const taoPhieuDKTiem = async (phieuDKTiem: PhieuDKTiem) => {
-  const res = await fetch('http://localhost:5000/api/phieu-dk-tiem', {
+  const res = await fetch(`${apiUrl}/phieu-dk-tiem`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ export const taoPhieuDKTiem = async (phieuDKTiem: PhieuDKTiem) => {
 }
 
 export const taoNguoiGiamHo = async (nguoiGiamHo: NguoiGiamHo) => {
-  const res = await fetch('http://localhost:5000/api/nguoi-giam-ho', {
+  const res = await fetch(`${apiUrl}/nguoi-giam-ho`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -79,7 +80,7 @@ export const tongSoLieuGoiTiem = (goiTiem: GoiTiem) => {
 }
 
 export const dkLichLamViec = async (MaLich: number, MaNhanVien: number) => {
-  const res = await fetch('http://localhost:5000/api/nhan-vien-lich-lam-viec', {
+  const res = await fetch(`${apiUrl}/nhan-vien-lich-lam-viec`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export const dkLichLamViec = async (MaLich: number, MaNhanVien: number) => {
 }
 
 export const taoLichLamViec = async (lichLamViec: LichLamViec) => {
-  const res = await fetch('http://localhost:5000/api/lich-lam-viec', {
+  const res = await fetch(`${apiUrl}/lich-lam-viec`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

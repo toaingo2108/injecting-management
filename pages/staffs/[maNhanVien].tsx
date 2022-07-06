@@ -10,10 +10,11 @@ import { GetServerSideProps, NextPage } from 'next'
 import Layout from '~/components/layout'
 import MyAvatar from '~/components/myAvatar'
 import { NhanVien } from '~/model'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const maNhanVien = ctx.params?.maNhanVien
-  const res = await fetch(`http://localhost:5000/api/nhan-vien/${maNhanVien}`)
+  const res = await fetch(`${apiUrl}/nhan-vien/${maNhanVien}`)
   const data = await res.json()
   if (!data) {
     return {

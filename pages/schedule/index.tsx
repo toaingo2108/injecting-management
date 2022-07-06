@@ -21,9 +21,10 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import { taoLichLamViec } from '~/src/utils'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`http://localhost:5000/api/lich-lam-viec`)
+  const res = await fetch(`${apiUrl}/lich-lam-viec`)
   const data = await res.json()
   if (!data) {
     return {

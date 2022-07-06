@@ -5,9 +5,10 @@ import VaccineItem from '~/components/vaccineItem'
 import Cart from '~/components/cart'
 import { VacXin } from '~/model'
 import { v4 as uuidv4 } from 'uuid'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`http://localhost:5000/api/vac-xin`)
+  const res = await fetch(`${apiUrl}/vac-xin`)
   const data = await res.json()
   const dsVacXin: VacXin[] = data.dsVacXin
   return { props: { dsVacXin } }

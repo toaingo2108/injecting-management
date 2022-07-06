@@ -6,9 +6,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { GoiTiem } from '~/model'
 import Cart from '~/components/cart'
 import GoiTiemItem from '~/components/goiTiemItem'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`http://localhost:5000/api/goi-tiem`)
+  const res = await fetch(`${apiUrl}/goi-tiem`)
   const data = await res.json()
   if (!data) {
     return {

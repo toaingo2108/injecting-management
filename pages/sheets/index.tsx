@@ -5,9 +5,10 @@ import Layout from '~/components/layout'
 import { v4 as uuidv4 } from 'uuid'
 import { PhieuDKTiem } from '~/model'
 import PhieuDKTiemItem from '~/components/phieuDKTiemItem'
+import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch('http://localhost:5000/api/phieu-dk-tiem')
+  const res = await fetch(`${apiUrl}/phieu-dk-tiem`)
   const data = await res.json()
   if (!data) {
     return {
