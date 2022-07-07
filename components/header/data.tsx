@@ -1,6 +1,5 @@
 import {
   // LocationOn,
-  CalendarMonth,
   // ContactSupport,
   Vaccines,
   Inventory,
@@ -12,11 +11,6 @@ export const pages = [
   //   icon: <LocationOn fontSize="small" />,
   //   link: '/injections/search',
   // },
-  {
-    name: 'Đăng ký tiêm',
-    icon: <CalendarMonth fontSize="small" />,
-    link: '/injections/register',
-  },
   {
     name: 'Tra cứu vắc xin',
     icon: <Vaccines fontSize="small" />,

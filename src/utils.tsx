@@ -1,9 +1,12 @@
+import { CartState } from '~/components/cart/cartSlice'
 import {
+  ChiTietPhieuDK,
   GoiTiem,
   KhachHang,
   LichLamViec,
   NguoiGiamHo,
   PhieuDKTiem,
+  PhieuDKTiem_GoiTiem,
   VacXin,
 } from '~/model'
 import { apiUrl } from './constants'
@@ -131,6 +134,99 @@ export const taoLichLamViec = async (lichLamViec: LichLamViec) => {
   } catch (error) {
     return {
       notFound: true,
+    }
+  }
+}
+
+export const taoChiTietPhieuDK = async (chiTietPhieuDK: ChiTietPhieuDK) => {
+  try {
+    const res = await fetch(`${apiUrl}/chi-tiet-phieu-dk`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(chiTietPhieuDK),
+    })
+    const data = await res.json()
+    return data.chiTietPhieuDK
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
+}
+
+export const taoPhieuDKTiem_GoiTiem = async (
+  phieuDKTiem_GoiTiem: PhieuDKTiem_GoiTiem
+) => {
+  try {
+    const res = await fetch(`${apiUrl}/phieu-dk-tiem-goi-tiem`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(phieuDKTiem_GoiTiem),
+    })
+    const data = await res.json()
+    return data.phieuDKTiem_GoiTiem
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
+}
+
+export const taoDKTiem = async (
+  phieuDKTiem: PhieuDKTiem,
+  MaTrungTam: number,
+  NgayTiem: string,
+  cart: CartState
+) => {
+  try {
+    if (cart.goiTiem.length > 0) {
+      for (let goiTiem of cart.goiTiem) {
+        await taoPhieuDKTiem_GoiTiem({
+          MaGoiTiem: goiTiem.MaGoiTiem,
+          MaPhieuDK: phieuDKTiem.MaPhieuDK,
+          SoLuong: 1,
+          TinhTrang: '',
+        })
+        for (let vacXin of goiTiem.DSVacXin) {
+          await taoChiTietPhieuDK({
+            MaPhieuDK: phieuDKTiem.MaPhieuDK,
+            MaTrungTam,
+            NgayTiem,
+            MaGoiTiem: goiTiem.MaGoiTiem,
+            MaVacXin: vacXin.MaVacXin,
+            SoLuong: vacXin.SoLuong,
+            MaPhieuTiem: 0,
+            TinhTrang: '',
+            GhiChu: '',
+          })
+        }
+      }
+    }
+    if (cart.vaccines.length > 0) {
+      for (let vacXin of cart.vaccines) {
+        await taoChiTietPhieuDK({
+          MaPhieuDK: phieuDKTiem.MaPhieuDK,
+          MaTrungTam,
+          NgayTiem,
+          MaGoiTiem: 0,
+          MaVacXin: vacXin.MaVacXin,
+          SoLuong: 1,
+          MaPhieuTiem: 0,
+          TinhTrang: '',
+          GhiChu: '',
+        })
+      }
+    }
+    return { success: true }
+  } catch (error) {
+    return {
+      success: false,
     }
   }
 }

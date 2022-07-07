@@ -83,3 +83,9 @@ GET http://localhost:5000/api/vac-xin/trung-tam/1
 
 ###
 GET http://localhost:5000/api/nhan-vien/trung-tam/1
+
+###
+GET http://localhost:5000/api/goi-tiem/phieu-dk-tiem/1
+
+###
+GET http://localhost:5000/api/nguoi-giam-ho/phieu-dk-tiem/27

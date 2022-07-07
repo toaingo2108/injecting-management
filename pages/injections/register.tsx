@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import {
   Box,
   Button,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
 } from '@mui/material'
 import dayjs from 'dayjs'
 import Layout from '~/components/layout'
@@ -18,6 +20,7 @@ import {
   NguoiGiamHo,
   PhieuDKTiem,
   RegisterInjections,
+  TrungTam,
 } from '~/model'
 import { RestartAlt } from '@mui/icons-material'
 import SaveIcon from '@mui/icons-material/Save'
@@ -26,9 +29,41 @@ import VaccineItem from '~/components/vaccineItem'
 import { useAppSelector } from '~/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
 import GoiTiemItem from '~/components/goiTiemItem'
-import { taoKhachHang, taoNguoiGiamHo, taoPhieuDKTiem } from '~/src/utils'
+import {
+  taoDKTiem,
+  taoKhachHang,
+  taoNguoiGiamHo,
+  taoPhieuDKTiem,
+} from '~/src/utils'
+import { apiUrl } from '~/src/constants'
 
-const ScheduleRegister: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const res = await fetch(`${apiUrl}/trung-tam`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const dsTrungTam: TrungTam[] = data.dsTrungTam
+    return { props: { dsTrungTam } }
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
+}
+
+interface Props {
+  dsTrungTam: TrungTam[]
+}
+
+const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
+  const cart = useAppSelector((state) => state.cart)
+  const cartVaccines = useAppSelector((state) => state.cart.vaccines)
+  const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
+
   const {
     control,
     handleSubmit,
@@ -41,6 +76,7 @@ const ScheduleRegister: NextPage = () => {
 
   const onSubmit: SubmitHandler<RegisterInjections> = async (data) => {
     setLoadingRegister(true)
+    console.log(data)
     const khachHang: KhachHang = await taoKhachHang(data.khachHang)
 
     if (khachHang) {
@@ -57,18 +93,23 @@ const ScheduleRegister: NextPage = () => {
         }
         const nguoiGiamHo: NguoiGiamHo = await taoNguoiGiamHo(data.nguoiGiamHo)
         if (nguoiGiamHo) {
-          alert('THÀNH CÔNG')
+          alert('Đang trong quá trình hoàn tất')
         }
+        const { success } = await taoDKTiem(
+          phieuDKTiem,
+          data.MaTrungTam,
+          data.NgayTiem,
+          cart
+        )
+        if (success) alert('THÀNH CÔNG')
+        else alert('THẤT BẠI')
       }
     }
-    reset()
+    // reset()
     setLoadingRegister(false)
   }
 
   let yourDate = dayjs(new Date()).format('YYYY-MM-DD')
-
-  const cartVaccines = useAppSelector((state) => state.cart.vaccines)
-  const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
 
   return (
     <Layout title="Đăng ký thông tin tiêm chủng" titlePage="Đăng ký tiêm chủng">
@@ -128,18 +169,15 @@ const ScheduleRegister: NextPage = () => {
               <Controller
                 name="khachHang.GioiTinh"
                 control={control}
-                defaultValue={0}
                 render={({ field }) => (
                   <Grid item container direction="row">
-                    <ToggleButtonGroup
-                      size="small"
-                      {...field}
-                      exclusive
-                      color="primary"
-                    >
-                      <ToggleButton value={0}>Nam</ToggleButton>
-                      <ToggleButton value={1}>Nữ</ToggleButton>
-                    </ToggleButtonGroup>
+                    <FormControl fullWidth variant="filled">
+                      <InputLabel>Chọn giới tính</InputLabel>
+                      <Select {...field}>
+                        <MenuItem value={0}>Nữ</MenuItem>
+                        <MenuItem value={1}>Nam</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Grid>
                 )}
               />
@@ -155,6 +193,7 @@ const ScheduleRegister: NextPage = () => {
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
+                      type="number"
                       size="small"
                       label="Số tài khoản"
                       {...register('khachHang.SoTaiKhoan', {
@@ -292,19 +331,18 @@ const ScheduleRegister: NextPage = () => {
                 )}
               />
             </Grid>
-          </Grid>
 
-          <Grid item xs={12} container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Controller
-                name="phieuDKTiem.KetQuaKhamSL"
+                name="NgayTiem"
                 control={control}
-                defaultValue=""
+                defaultValue={yourDate}
                 render={({ field }) => (
                   <Grid container direction="column">
                     <TextField
+                      type="date"
                       size="small"
-                      label="Kết quả khám sàn lọc"
+                      label="Chọn ngày tiêm mong muốn"
                       variant="outlined"
                       {...field}
                     />
@@ -312,7 +350,129 @@ const ScheduleRegister: NextPage = () => {
                 )}
               />
             </Grid>
+          </Grid>
 
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={12}>
+              <Controller
+                name="phieuDKTiem.TrangThai"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormControl fullWidth variant="filled">
+                        <InputLabel>Trạng thái khám sàn lọc</InputLabel>
+                        <Select
+                          {...field}
+                          {...register('phieuDKTiem.TrangThai', {
+                            validate: (value) => value !== '',
+                          })}
+                        >
+                          {['Chưa khám', 'Đang khám', 'Bỏ qua', 'Đã khám'].map(
+                            (item) => (
+                              <MenuItem key={uuidv4()} value={item}>
+                                {item}
+                              </MenuItem>
+                            )
+                          )}
+                        </Select>
+                      </FormControl>
+                      {errors.MaTrungTam && (
+                        <ErrorAlert message="Vui lòng không để trống mục này" />
+                      )}
+                    </Grid>
+                  </Grid>
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Controller
+                name="phieuDKTiem.KetQuaKhamSL"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormControl fullWidth variant="filled">
+                        <InputLabel>Kết quả khám sàn lọc</InputLabel>
+                        <Select
+                          {...field}
+                          {...register('phieuDKTiem.KetQuaKhamSL', {
+                            validate: (value) => value !== '',
+                          })}
+                        >
+                          {['Đạt', 'Không đạt'].map((item) => (
+                            <MenuItem key={uuidv4()} value={item}>
+                              {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      {errors.MaTrungTam && (
+                        <ErrorAlert message="Vui lòng không để trống mục này" />
+                      )}
+                    </Grid>
+                  </Grid>
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Controller
+                name="MaTrungTam"
+                control={control}
+                defaultValue={0}
+                render={({ field }) => (
+                  <Grid container direction="column">
+                    <Grid item>
+                      <FormControl
+                        fullWidth
+                        variant="filled"
+                        sx={{ minWidth: 120 }}
+                      >
+                        <InputLabel>Chọn trung tâm đăng ký tiêm</InputLabel>
+                        <Select
+                          {...field}
+                          {...register('MaTrungTam', {
+                            validate: (value) => value !== 0,
+                          })}
+                        >
+                          {dsTrungTam?.map((item) => (
+                            <MenuItem key={uuidv4()} value={item.MaTrungTam}>
+                              {item.MaTrungTam} - {item.TenTrungTam} -{' '}
+                              {item.DiaChi}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      {errors.MaTrungTam && (
+                        <ErrorAlert message="Vui lòng chọn trung tâm tiêm chủng" />
+                      )}
+                    </Grid>
+                  </Grid>
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="phieuDKTiem.STT"
+                control={control}
+                render={({ field }) => (
+                  <Grid container direction="column">
+                    <TextField
+                      type="number"
+                      size="small"
+                      label="STT"
+                      variant="outlined"
+                      {...field}
+                    />
+                  </Grid>
+                )}
+              />
+            </Grid>
             <Grid item xs={12} sm={6}>
               <Controller
                 name="phieuDKTiem.NgayLap"

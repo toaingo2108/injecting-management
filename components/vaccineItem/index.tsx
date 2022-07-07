@@ -24,7 +24,7 @@ const VaccineItem = ({ vaccine, action }: Props) => {
           {vaccine.TenVacXin}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {vaccine.TenNSX}
+          NSX: {vaccine.TenNSX || '...'}
         </Typography>
         <Typography
           variant="body2"

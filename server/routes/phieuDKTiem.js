@@ -56,13 +56,13 @@ router.get('/:MaPhieuDK', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { MaKhachHang, NgayLap } = req.body
+  const { MaKhachHang, NgayLap, KetQuaKhamSL, TrangThai, STT } = req.body
   try {
     let pool = await sql.connect(config)
     const { recordset, output } = await pool.query(
-      `insert into PhieuDangKyTiem (MaKhachHang, NgayLap) 
+      `insert into PhieuDangKyTiem (MaKhachHang, NgayLap, KetQuaKhamSL, TrangThai, STT) 
         output inserted.*
-        values (${MaKhachHang}, '${NgayLap}')`
+        values (${MaKhachHang}, '${NgayLap}', N'${KetQuaKhamSL}', N'${TrangThai}', ${STT})`
     )
     if (output.error) {
       return res.status(400).json({
