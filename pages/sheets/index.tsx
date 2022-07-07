@@ -8,15 +8,21 @@ import PhieuDKTiemItem from '~/components/phieuDKTiemItem'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${apiUrl}/phieu-dk-tiem`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const res = await fetch(`${apiUrl}/phieu-dk-tiem`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const dsPhieuDKTiem: PhieuDKTiem[] = data.dsPhieuDKTiem
+    return { props: { dsPhieuDKTiem } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const dsPhieuDKTiem: PhieuDKTiem[] = data.dsPhieuDKTiem
-  return { props: { dsPhieuDKTiem } }
 }
 
 interface Props {

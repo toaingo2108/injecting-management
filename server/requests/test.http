@@ -71,3 +71,15 @@ GET http://localhost:5000/api/nhan-vien-dk-lich/1
 ###
 GET http://localhost:5000/api/phieu-dang-ky
 
+
+###
+GET http://localhost:5000/api/khach-hang/2
+
+###
+GET http://localhost:5000/api/trung-tam
+
+###
+GET http://localhost:5000/api/vac-xin/trung-tam/1
+
+###
+GET http://localhost:5000/api/nhan-vien/trung-tam/1

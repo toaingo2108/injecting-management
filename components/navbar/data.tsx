@@ -11,10 +11,10 @@ export const pages = [
     name: 'Phiếu đăng ký tiêm chủng',
     link: '/sheets',
   },
-  // {
-  //   name: 'Tiêm chủng cho người lớn',
-  //   link: '/blog',
-  // },
+  {
+    name: 'Trung tâm',
+    link: '/centers',
+  },
   // {
   //   name: 'Cẩm nang',
   //   link: '/blog',

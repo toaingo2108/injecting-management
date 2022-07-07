@@ -24,7 +24,7 @@ const KhachHangItem = ({ khachHang }: Props) => {
           {khachHang.TenKhachHang}
         </Typography>
         <Typography variant="body2" color="text.primary">
-          Giới tính: {khachHang.GioiTinh ? 'Nữ' : 'Nam'}
+          Giới tính: {khachHang.GioiTinh ? 'Nam' : 'Nữ'}
         </Typography>
         <Typography variant="body2" color="text.primary">
           {dayjs(khachHang.NgaySinh).format('DD-MM-YYYY')}
