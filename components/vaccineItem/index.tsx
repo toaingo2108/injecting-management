@@ -14,13 +14,24 @@ const VaccineItem = ({ vaccine, action }: Props) => {
   return (
     <CardContent>
       <Box onClick={() => router.push(`/vaccines/${vaccine.MaVacXin}`)}>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography
+          gutterBottom
+          variant="h6"
+          component="div"
+          noWrap
+          overflow="hiden"
+        >
           {vaccine.TenVacXin}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {vaccine.TenNSX}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          overflow="hiden"
+          height={50}
+        >
           {vaccine.MoTa}
         </Typography>
         <Typography
@@ -42,12 +53,7 @@ const VaccineItem = ({ vaccine, action }: Props) => {
         <Typography variant="body1" color="text" mt={2}>
           Phòng bệnh:
         </Typography>
-        <Typography
-          variant="body2"
-          color="text"
-          mt={1}
-          sx={{ height: 50, overflow: 'hidden' }}
-        >
+        <Typography variant="body2" color="text" mt={1} mb={4} height={50}>
           {vaccine.MoTa}
         </Typography>
       </Box>

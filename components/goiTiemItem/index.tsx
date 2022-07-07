@@ -14,10 +14,16 @@ const GoiTiemItem = ({ goiTiem, action }: Props) => {
   return (
     <CardContent>
       <Box onClick={() => router.push(`/packages/${goiTiem.MaGoiTiem}`)}>
-        <Typography gutterBottom variant="h6" component="div">
+        <Typography
+          gutterBottom
+          variant="h6"
+          component="div"
+          noWrap
+          overflow="hidden"
+        >
           {goiTiem.TenGoiTiem}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" height={50}>
           {goiTiem.MoTa}
         </Typography>
 
