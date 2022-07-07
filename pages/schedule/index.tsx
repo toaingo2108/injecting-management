@@ -24,15 +24,21 @@ import { taoLichLamViec } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${apiUrl}/lich-lam-viec`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const res = await fetch(`${apiUrl}/lich-lam-viec`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const dsLichLamViec: LichLamViec[] = data.dsLichLamViec
+    return { props: { dsLichLamViec } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const dsLichLamViec: LichLamViec[] = data.dsLichLamViec
-  return { props: { dsLichLamViec } }
 }
 
 interface Props {

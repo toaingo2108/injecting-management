@@ -8,10 +8,16 @@ import { v4 as uuidv4 } from 'uuid'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${apiUrl}/vac-xin`)
-  const data = await res.json()
-  const dsVacXin: VacXin[] = data.dsVacXin
-  return { props: { dsVacXin } }
+  try {
+    const res = await fetch(`${apiUrl}/vac-xin`)
+    const data = await res.json()
+    const dsVacXin: VacXin[] = data.dsVacXin
+    return { props: { dsVacXin } }
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
 }
 
 interface Props {

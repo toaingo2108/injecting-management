@@ -23,42 +23,60 @@ export const totalPriceCart = (
 }
 
 export const taoKhachHang = async (khachHang: KhachHang) => {
-  const res = await fetch(`${apiUrl}/khach-hang`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(khachHang),
-  })
-  const data = await res.json()
-  return data.khachHang
+  try {
+    const res = await fetch(`${apiUrl}/khach-hang`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(khachHang),
+    })
+    const data = await res.json()
+    return data.khachHang
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
 }
 
 export const taoPhieuDKTiem = async (phieuDKTiem: PhieuDKTiem) => {
-  const res = await fetch(`${apiUrl}/phieu-dk-tiem`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(phieuDKTiem),
-  })
-  const data = await res.json()
-  return data.phieuDKTiem
+  try {
+    const res = await fetch(`${apiUrl}/phieu-dk-tiem`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(phieuDKTiem),
+    })
+    const data = await res.json()
+    return data.phieuDKTiem
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
 }
 
 export const taoNguoiGiamHo = async (nguoiGiamHo: NguoiGiamHo) => {
-  const res = await fetch(`${apiUrl}/nguoi-giam-ho`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(nguoiGiamHo),
-  })
-  const data = await res.json()
-  return data.nguoiGiamHo
+  try {
+    const res = await fetch(`${apiUrl}/nguoi-giam-ho`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(nguoiGiamHo),
+    })
+    const data = await res.json()
+    return data.nguoiGiamHo
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
 }
 
 export const rowsGoiTiem = (goiTiem: GoiTiem) => {
@@ -80,27 +98,39 @@ export const tongSoLieuGoiTiem = (goiTiem: GoiTiem) => {
 }
 
 export const dkLichLamViec = async (MaLich: number, MaNhanVien: number) => {
-  const res = await fetch(`${apiUrl}/nhan-vien-lich-lam-viec`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({ MaLich, MaNhanVien }),
-  })
-  const data = await res.json()
-  return data.nhanVien_LichLamViec
+  try {
+    const res = await fetch(`${apiUrl}/nhan-vien-lich-lam-viec`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ MaLich, MaNhanVien }),
+    })
+    const data = await res.json()
+    return data.nhanVien_LichLamViec
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
 }
 
 export const taoLichLamViec = async (lichLamViec: LichLamViec) => {
-  const res = await fetch(`${apiUrl}/lich-lam-viec`, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify(lichLamViec),
-  })
-  const data = await res.json()
-  return data.lichLamViec
+  try {
+    const res = await fetch(`${apiUrl}/lich-lam-viec`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(lichLamViec),
+    })
+    const data = await res.json()
+    return data.lichLamViec
+  } catch (error) {
+    return {
+      notFound: true,
+    }
+  }
 }

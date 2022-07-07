@@ -9,15 +9,21 @@ import GoiTiemItem from '~/components/goiTiemItem'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${apiUrl}/goi-tiem`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const res = await fetch(`${apiUrl}/goi-tiem`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const dsGoiTiem: GoiTiem[] = data.dsGoiTiem
+    return { props: { dsGoiTiem } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const dsGoiTiem: GoiTiem[] = data.dsGoiTiem
-  return { props: { dsGoiTiem } }
 }
 
 interface Props {

@@ -7,22 +7,28 @@ import { KhachHang, PhieuDKTiem } from '~/model'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const maPhieuDK = ctx.params?.maPhieuDK
-  const res = await fetch(`${apiUrl}/phieu-dk-tiem/${maPhieuDK}`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const maPhieuDK = ctx.params?.maPhieuDK
+    const res = await fetch(`${apiUrl}/phieu-dk-tiem/${maPhieuDK}`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const phieuDKTiem: PhieuDKTiem = data.phieuDKTiem
+
+    const dataKhachHang = await fetch(
+      `${apiUrl}/khach-hang/${phieuDKTiem.MaKhachHang}`
+    ).then((data) => data.json())
+    const khachHang: KhachHang = dataKhachHang.khachHang
+
+    return { props: { phieuDKTiem, khachHang } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const phieuDKTiem: PhieuDKTiem = data.phieuDKTiem
-
-  const dataKhachHang = await fetch(
-    `${apiUrl}/khach-hang/${phieuDKTiem.MaKhachHang}`
-  ).then((data) => data.json())
-  const khachHang: KhachHang = dataKhachHang.khachHang
-
-  return { props: { phieuDKTiem, khachHang } }
 }
 
 interface Props {

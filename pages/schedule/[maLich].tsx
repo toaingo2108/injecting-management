@@ -25,27 +25,33 @@ import { dkLichLamViec } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const maLich = ctx.params?.maLich
-  const res = await fetch(`${apiUrl}/lich-lam-viec/${maLich}`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const maLich = ctx.params?.maLich
+    const res = await fetch(`${apiUrl}/lich-lam-viec/${maLich}`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const lichLamViec: LichLamViec = data.lichLamViec
+
+    const dataNhanVien = await fetch(
+      `${apiUrl}/nhan-vien/dk-lich/${lichLamViec.MaLich}`
+    ).then((data) => data.json())
+    const dsNhanVien: NhanVien[] = dataNhanVien.dsNhanVien
+
+    const dataNhanVienChuaDK = await fetch(
+      `${apiUrl}/nhan-vien/chua-dk-lich/${lichLamViec.MaLich}`
+    ).then((data) => data.json())
+    const dsNhanVienChuaDK: NhanVien[] = dataNhanVienChuaDK.dsNhanVien
+
+    return { props: { lichLamViec, dsNhanVien, dsNhanVienChuaDK } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const lichLamViec: LichLamViec = data.lichLamViec
-
-  const dataNhanVien = await fetch(
-    `${apiUrl}/nhan-vien/dk-lich/${lichLamViec.MaLich}`
-  ).then((data) => data.json())
-  const dsNhanVien: NhanVien[] = dataNhanVien.dsNhanVien
-
-  const dataNhanVienChuaDK = await fetch(
-    `${apiUrl}/nhan-vien/chua-dk-lich/${lichLamViec.MaLich}`
-  ).then((data) => data.json())
-  const dsNhanVienChuaDK: NhanVien[] = dataNhanVienChuaDK.dsNhanVien
-
-  return { props: { lichLamViec, dsNhanVien, dsNhanVienChuaDK } }
 }
 
 interface Props {

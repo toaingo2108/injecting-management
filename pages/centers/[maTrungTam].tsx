@@ -9,27 +9,33 @@ import { v4 as uuidv4 } from 'uuid'
 import NhanVienItem from '~/components/nhanVienItem'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const maTrungTam = ctx.params?.maTrungTam
-  const res = await fetch(`${apiUrl}/trung-tam/${maTrungTam}`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const maTrungTam = ctx.params?.maTrungTam
+    const res = await fetch(`${apiUrl}/trung-tam/${maTrungTam}`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const trungTam: TrungTam = data.trungTam
+
+    const dataDsVacXin = await fetch(
+      `${apiUrl}/vac-xin/trung-tam/${trungTam.MaTrungTam}`
+    ).then((data) => data.json())
+    const dsVacXin: VacXin[] = dataDsVacXin.dsVacXin
+
+    const dataNhanVien = await fetch(
+      `${apiUrl}/nhan-vien/trung-tam/${trungTam.MaTrungTam}`
+    ).then((data) => data.json())
+    const dsNhanVien: NhanVien[] = dataNhanVien.dsNhanVien
+
+    return { props: { trungTam, dsVacXin, dsNhanVien } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const trungTam: TrungTam = data.trungTam
-
-  const dataDsVacXin = await fetch(
-    `${apiUrl}/vac-xin/trung-tam/${trungTam.MaTrungTam}`
-  ).then((data) => data.json())
-  const dsVacXin: VacXin[] = dataDsVacXin.dsVacXin
-
-  const dataNhanVien = await fetch(
-    `${apiUrl}/nhan-vien/trung-tam/${trungTam.MaTrungTam}`
-  ).then((data) => data.json())
-  const dsNhanVien: NhanVien[] = dataNhanVien.dsNhanVien
-
-  return { props: { trungTam, dsVacXin, dsNhanVien } }
 }
 
 interface Props {

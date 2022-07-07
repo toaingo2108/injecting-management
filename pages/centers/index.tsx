@@ -8,15 +8,21 @@ import { apiUrl } from '~/src/constants'
 import TrungTamItem from '~/components/trungTamItem'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${apiUrl}/trung-tam`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const res = await fetch(`${apiUrl}/trung-tam`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const dsTrungTam: TrungTam[] = data.dsTrungTam
+    return { props: { dsTrungTam } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const dsTrungTam: TrungTam[] = data.dsTrungTam
-  return { props: { dsTrungTam } }
 }
 
 interface Props {

@@ -16,16 +16,22 @@ import { rowsGoiTiem, tongSoLieuGoiTiem } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const maGoiTiem = ctx.params?.maGoiTiem
-  const res = await fetch(`${apiUrl}/goi-tiem/${maGoiTiem}`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const maGoiTiem = ctx.params?.maGoiTiem
+    const res = await fetch(`${apiUrl}/goi-tiem/${maGoiTiem}`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const goiTiem: GoiTiem = data.goiTiem
+    return { props: { goiTiem } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const goiTiem: GoiTiem = data.goiTiem
-  return { props: { goiTiem } }
 }
 
 interface Props {

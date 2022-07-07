@@ -13,16 +13,22 @@ import { NhanVien } from '~/model'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const maNhanVien = ctx.params?.maNhanVien
-  const res = await fetch(`${apiUrl}/nhan-vien/${maNhanVien}`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const maNhanVien = ctx.params?.maNhanVien
+    const res = await fetch(`${apiUrl}/nhan-vien/${maNhanVien}`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const nhanVien: NhanVien = data.nhanVien
+    return { props: { nhanVien } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const nhanVien: NhanVien = data.nhanVien
-  return { props: { nhanVien } }
 }
 
 interface Props {

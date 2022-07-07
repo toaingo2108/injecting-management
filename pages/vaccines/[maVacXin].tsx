@@ -7,16 +7,22 @@ import { VacXin } from '~/model'
 import { apiUrl } from '~/src/constants'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const maVacXin = ctx.params?.maVacXin
-  const res = await fetch(`${apiUrl}/vac-xin/${maVacXin}`)
-  const data = await res.json()
-  if (!data) {
+  try {
+    const maVacXin = ctx.params?.maVacXin
+    const res = await fetch(`${apiUrl}/vac-xin/${maVacXin}`)
+    const data = await res.json()
+    if (!data) {
+      return {
+        notFound: true,
+      }
+    }
+    const vacXin: VacXin = data.vacXin
+    return { props: { vacXin } }
+  } catch (error) {
     return {
       notFound: true,
     }
   }
-  const vacXin: VacXin = data.vacXin
-  return { props: { vacXin } }
 }
 
 interface Props {
