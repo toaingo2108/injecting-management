@@ -4,5 +4,6 @@ export interface HoaDon {
   MaPhieuDK: number
   NgayLap: string
   NgayThanhToan: string
+  LoaiThanhToan: number
   TongTien: number
 }

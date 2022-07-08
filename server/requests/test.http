@@ -99,4 +99,10 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/api/phieu-tiem/phieu-dk-tiem/105
+GET http://localhost:5000/api/phieu-tiem/phieu-dk-tiem/
+
+###
+GET http://localhost:5000/api/hoa-don/phieu-dk-tiem/105
+
+###
+GET http://localhost:5000/api/nhan-vien/trung-tam/all

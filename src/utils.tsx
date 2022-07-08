@@ -5,6 +5,7 @@ import {
   KhachHang,
   LichLamViec,
   NguoiGiamHo,
+  NhanVienTrungTam,
   PhieuDKTiem,
   PhieuDKTiem_GoiTiem,
   PhieuTiem,
@@ -131,6 +132,15 @@ export const dkLichLamViec = async (MaLich: number, MaNhanVien: number) => {
       notFound: true,
     }
   }
+}
+
+export const getDsNhanVienTrungTam = async () => {
+  const dataDsNhanVienTrungTam = await fetch(
+    `${apiUrl}/nhan-vien/trung-tam/all`
+  ).then((data) => data.json())
+  const dsNhanVienTrungTam: NhanVienTrungTam[] =
+    dataDsNhanVienTrungTam.dsNhanVienTrungTam
+  return dsNhanVienTrungTam
 }
 
 export const taoLichLamViec = async (lichLamViec: LichLamViec) => {

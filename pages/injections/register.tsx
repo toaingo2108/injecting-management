@@ -402,7 +402,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                           ))}
                         </Select>
                       </FormControl>
-                      {errors.MaTrungTam && (
+                      {errors.phieuDKTiem?.KetQuaKhamSL && (
                         <ErrorAlert message="Vui lòng không để trống mục này" />
                       )}
                     </Grid>

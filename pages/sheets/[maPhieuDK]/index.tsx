@@ -5,12 +5,23 @@ import KhachHangItem from '~/components/khachHangItem'
 import Layout from '~/components/layout'
 import NguoiGiamHoItem from '~/components/nguoiGiamHoItem'
 import PhieuDKTiemItem from '~/components/phieuDKTiemItem'
-import { GoiTiem, KhachHang, NguoiGiamHo, PhieuDKTiem, VacXin } from '~/model'
+import {
+  GoiTiem,
+  HoaDon,
+  KhachHang,
+  NguoiGiamHo,
+  PhieuDKTiem,
+  VacXin,
+} from '~/model'
 import { apiUrl } from '~/src/constants'
 import { v4 as uuidv4 } from 'uuid'
 import VaccineItem from '~/components/vaccineItem'
 import { getKhachHang } from '~/src/utils'
 import { useRouter } from 'next/router'
+import HoaDonItem from '~/components/hoaDonItem'
+import { useAppDispatch } from '~/redux/hook'
+import modalSlice from '~/components/modal/modalSlice'
+import ModalThanhToanPhieuDK from '~/components/modalThanhToanPhieuDK'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -41,8 +52,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     ).then((data) => data.json())
     const dsVacXin: VacXin[] = dataDsVacXin.dsVacXin
 
+    const dataHoaDon = await fetch(
+      `${apiUrl}/hoa-don/phieu-dk-tiem/${phieuDKTiem.MaPhieuDK}`
+    ).then((data) => data.json())
+    const hoaDon: HoaDon = dataHoaDon?.hoaDon || {}
+
     return {
-      props: { phieuDKTiem, khachHang, nguoiGiamHo, dsGoiTiem, dsVacXin },
+      props: {
+        phieuDKTiem,
+        khachHang,
+        nguoiGiamHo,
+        dsGoiTiem,
+        dsVacXin,
+        hoaDon,
+      },
     }
   } catch (error) {
     return {
@@ -57,6 +80,7 @@ interface Props {
   nguoiGiamHo?: NguoiGiamHo
   dsGoiTiem: GoiTiem[]
   dsVacXin: VacXin[]
+  hoaDon?: HoaDon
 }
 const SheetDetail: NextPage<Props> = ({
   phieuDKTiem,
@@ -64,8 +88,11 @@ const SheetDetail: NextPage<Props> = ({
   nguoiGiamHo,
   dsGoiTiem,
   dsVacXin,
+  hoaDon,
 }) => {
   const router = useRouter()
+
+  const dispatch = useAppDispatch()
 
   return (
     <Layout
@@ -111,48 +138,84 @@ const SheetDetail: NextPage<Props> = ({
               </Paper>
             </Grid>
           </Grid>
+          {nguoiGiamHo?.MaNguoiGiamHo && (
+            <Grid item container>
+              <Grid item>
+                <Typography
+                  variant="h6"
+                  textTransform="uppercase"
+                  color="primary"
+                >
+                  Thông tin người giám hộ của phiếu: {phieuDKTiem.MaPhieuDK}
+                </Typography>
+              </Grid>
 
-          <Grid item container>
-            <Grid item>
-              <Typography
-                variant="h6"
-                textTransform="uppercase"
-                color="primary"
-              >
-                Thông tin người giám hộ của phiếu: {phieuDKTiem.MaPhieuDK}
-              </Typography>
-            </Grid>
-            {nguoiGiamHo && (
               <Grid item xs={12} mt={2}>
                 <Paper elevation={6} sx={{ borderRadius: 5 }}>
                   <NguoiGiamHoItem nguoiGiamHo={nguoiGiamHo} />
                 </Paper>
               </Grid>
-            )}
-          </Grid>
+            </Grid>
+          )}
         </Grid>
 
-        <Grid item container xs={8}>
-          <Grid item container spacing={6}>
-            <Grid item xs={12} container spacing={2} alignContent="flex-start">
-              <Grid item xs={12}>
-                <Typography
-                  variant="h6"
-                  textTransform="uppercase"
-                  color="primary"
-                >
-                  Thông tin các gói tiêm
-                </Typography>
-              </Grid>
-              {dsGoiTiem?.map((goiTiem) => (
-                <Grid key={uuidv4()} item xs={4}>
-                  <Paper elevation={12} sx={{ borderRadius: 5 }}>
-                    <GoiTiemItem goiTiem={goiTiem} />
-                  </Paper>
+        <Grid item container xs={8} spacing={4}>
+          {dsGoiTiem.length > 0 && (
+            <Grid item container spacing={6}>
+              <Grid
+                item
+                xs={12}
+                container
+                spacing={2}
+                alignContent="flex-start"
+              >
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    textTransform="uppercase"
+                    color="primary"
+                  >
+                    Thông tin các gói tiêm
+                  </Typography>
                 </Grid>
-              ))}
+                {dsGoiTiem?.map((goiTiem) => (
+                  <Grid key={uuidv4()} item xs={4}>
+                    <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                      <GoiTiemItem goiTiem={goiTiem} />
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
-          </Grid>
+          )}
+          {dsVacXin.length > 0 && (
+            <Grid item container spacing={6}>
+              <Grid
+                item
+                xs={12}
+                container
+                spacing={2}
+                alignContent="flex-start"
+              >
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    textTransform="uppercase"
+                    color="primary"
+                  >
+                    Thông tin các vắc xin
+                  </Typography>
+                </Grid>
+                {dsVacXin?.map((vacXin) => (
+                  <Grid key={uuidv4()} item xs={4}>
+                    <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                      <VaccineItem vaccine={vacXin} />
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          )}
           <Grid item container spacing={6}>
             <Grid item xs={12} container spacing={2} alignContent="flex-start">
               <Grid item xs={12}>
@@ -161,20 +224,33 @@ const SheetDetail: NextPage<Props> = ({
                   textTransform="uppercase"
                   color="primary"
                 >
-                  Thông tin các vắc xin
+                  Hoá đơn
                 </Typography>
               </Grid>
-              {dsVacXin?.map((vacXin) => (
-                <Grid key={uuidv4()} item xs={4}>
+              <Grid item xs={12}>
+                {hoaDon?.MaHoaDon ? (
                   <Paper elevation={12} sx={{ borderRadius: 5 }}>
-                    <VaccineItem vaccine={vacXin} />
+                    <HoaDonItem hoaDon={hoaDon} />
                   </Paper>
-                </Grid>
-              ))}
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    onClick={() => dispatch(modalSlice.actions.openModal())}
+                  >
+                    Thanh toán
+                  </Button>
+                )}
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <ModalThanhToanPhieuDK
+        phieuDKTiem={phieuDKTiem}
+        dsGoiTiem={dsGoiTiem}
+        dsVacXin={dsVacXin}
+      />
     </Layout>
   )
 }

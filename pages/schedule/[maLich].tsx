@@ -135,12 +135,10 @@ const ScheduleDetail: NextPage<Props> = ({
             <FormControl fullWidth variant="standard" sx={{ minWidth: 120 }}>
               <InputLabel>Mã nhân viên</InputLabel>
               <Select value={maNhanVien} onChange={handleChange}>
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
                 {dsNhanVienChuaDK?.map((item) => (
-                  <MenuItem key={uuidv4()} value={`${item.MaNhanVien}`}>
-                    {item.MaNhanVien}
+                  <MenuItem key={uuidv4()} value={item.MaNhanVien}>
+                    {item.MaNhanVien} - {item.TenNhanVien} - Trung tâm:{' '}
+                    {item.MaTrungTam}
                   </MenuItem>
                 ))}
               </Select>

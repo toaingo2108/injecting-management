@@ -46,8 +46,6 @@ router.get('/phieu-dk-tiem/:MaPhieuDK', async (req, res) => {
       })
     }
 
-    console.log(recordset)
-
     res.json({
       success: true,
       nguoiGiamHo: recordset[0],
