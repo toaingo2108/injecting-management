@@ -18,7 +18,10 @@ import ErrorAlert from '../errorAlert'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import { MonetizationOn } from '@mui/icons-material'
-import { getDsNhanVienTrungTam, totalPriceCart } from '~/src/utils'
+import { getDsNhanVienTrungTam, taoHoaDon, totalPriceCart } from '~/src/utils'
+import { useAppDispatch } from '~/redux/hook'
+import modalSlice from '../modal/modalSlice'
+import { useRouter } from 'next/router'
 
 interface Props {
   phieuDKTiem: PhieuDKTiem
@@ -27,6 +30,8 @@ interface Props {
 }
 
 const ModalThanhToanPhieuDK = ({ phieuDKTiem, dsGoiTiem, dsVacXin }: Props) => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
   const {
     control,
     handleSubmit,
@@ -61,8 +66,10 @@ const ModalThanhToanPhieuDK = ({ phieuDKTiem, dsGoiTiem, dsVacXin }: Props) => {
   const onSubmit: SubmitHandler<HoaDon> = async (data) => {
     setLoadingRegister(true)
     setValue('TongTien', tongTienThanhToan)
-    console.log(data)
+    await taoHoaDon(data)
+    router.push(router.asPath)
     setLoadingRegister(false)
+    dispatch(modalSlice.actions.closeModal())
   }
 
   let yourDate = dayjs(new Date()).format('YYYY-MM-DD')

@@ -84,4 +84,40 @@ router.post('/temp', async (req, res) => {
   }
 })
 
+router.post('/', async (req, res) => {
+  const {
+    MaNhanVien,
+    MaPhieuDK,
+    NgayTiem,
+    KetQuaKham,
+    KetQuaSauTiem,
+    TrangThai,
+    STT,
+  } = req.body
+  try {
+    let pool = await sql.connect(config)
+    const { recordset, output } = await pool.query(
+      `insert into PhieuTiem (MaNhanVien, MaPhieuDK, NgayTiem, KetQuaKham, KetQuaSauTiem, TrangThai, STT)
+      output inserted.*
+      values (${MaNhanVien}, ${MaPhieuDK}, '${NgayTiem}', N'${KetQuaKham}', N'${KetQuaSauTiem}', N'${TrangThai}', ${STT})`
+    )
+    if (output.error) {
+      return res.status(400).json({
+        success: false,
+        message: output.error,
+      })
+    }
+    res.json({
+      success: true,
+      phieuTiem: recordset[0],
+    })
+  } catch (error) {
+    console.log(error.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi hệ thống',
+    })
+  }
+})
+
 module.exports = router

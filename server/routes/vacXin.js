@@ -6,7 +6,9 @@ const config = require('../config')
 router.get('/', async (req, res) => {
   try {
     let pool = await sql.connect(config)
-    const { recordset, output } = await pool.query('select * from VacXin')
+    const { recordset, output } = await pool.query(
+      'select * from VacXin where MaVacXin != 0'
+    )
     if (output.error) {
       return res.status(400).json({
         success: false,

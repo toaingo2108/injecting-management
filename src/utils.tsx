@@ -2,6 +2,7 @@ import { CartState } from '~/components/cart/cartSlice'
 import {
   ChiTietPhieuDK,
   GoiTiem,
+  HoaDon,
   KhachHang,
   LichLamViec,
   NguoiGiamHo,
@@ -273,6 +274,46 @@ export const taoPhieuTiem_temp = async (MaPhieuDK: number) => {
       },
       method: 'POST',
       body: JSON.stringify({ MaPhieuDK }),
+    })
+    const data = await res.json()
+    return data.phieuTiem
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true,
+    }
+  }
+}
+
+export const taoHoaDon = async (hoaDon: HoaDon) => {
+  try {
+    const res = await fetch(`${apiUrl}/hoa-don`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(hoaDon),
+    })
+    const data = await res.json()
+    return data.hoaDon
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true,
+    }
+  }
+}
+
+export const taoPhieuTiem = async (phieuTiem: PhieuTiem) => {
+  try {
+    const res = await fetch(`${apiUrl}/phieu-tiem`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(phieuTiem),
     })
     const data = await res.json()
     return data.phieuTiem

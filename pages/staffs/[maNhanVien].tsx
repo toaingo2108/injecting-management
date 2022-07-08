@@ -50,7 +50,7 @@ const StaffDetail: NextPage<Props> = ({ nhanVien }) => {
             }}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Paper elevation={2} sx={{ borderRadius: 5 }}>
             <CardContent>
               <Box>
@@ -61,7 +61,7 @@ const StaffDetail: NextPage<Props> = ({ nhanVien }) => {
                   Bằng cấp: {nhanVien.BangCap}
                 </Typography>
                 <Typography variant="h4" color="text.secondary">
-                  Bằng cấp: {nhanVien.ChucVu}
+                  Chức vụ: {nhanVien.ChucVu}
                 </Typography>
 
                 <Divider sx={{ my: 4 }} />

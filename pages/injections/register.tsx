@@ -82,7 +82,6 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
 
   const onSubmit: SubmitHandler<RegisterInjections> = async (data) => {
     setLoadingRegister(true)
-    console.log(data)
     const khachHang: KhachHang = await taoKhachHang(data.khachHang)
     if (khachHang) {
       data.phieuDKTiem = {

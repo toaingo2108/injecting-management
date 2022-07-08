@@ -75,13 +75,15 @@ const Schedule: NextPage<Props> = ({ dsLichLamViec }) => {
           </Button>
         </Grid>
         <Grid item xs={12} container spacing={2} alignContent="flex-start">
-          {dsLichLamViec?.map((item) => (
-            <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
-              <Paper elevation={24} sx={{ borderRadius: 5 }}>
-                <LichLamViecItem lichLamViec={item} action />
-              </Paper>
-            </Grid>
-          ))}
+          {dsLichLamViec
+            ?.sort((a: LichLamViec, b: LichLamViec) => b.MaLich - a.MaLich)
+            .map((item) => (
+              <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
+                <Paper elevation={24} sx={{ borderRadius: 5 }}>
+                  <LichLamViecItem lichLamViec={item} action />
+                </Paper>
+              </Grid>
+            ))}
         </Grid>
       </Grid>
       <MyModal>

@@ -100,45 +100,42 @@ const SheetDetail: NextPage<Props> = ({
       titlePage={`Thông tin chi tiết phiếu đăng ký tiêm - Mã [${phieuDKTiem.MaPhieuDK}]`}
     >
       <Grid container spacing={6}>
-        <Grid item container xs={4} spacing={6}>
-          <Grid item container spacing={2} alignContent="flex-start">
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={() =>
-                  router.push(`/sheets/${phieuDKTiem.MaPhieuDK}/injects`)
-                }
-              >
-                Xem các phiếu tiêm
-              </Button>
+        <Grid item container xs={4}>
+          <Grid item container direction="column" spacing={4}>
+            <Grid item container spacing={2} alignContent="flex-start">
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() =>
+                    router.push(`/sheets/${phieuDKTiem.MaPhieuDK}/injects`)
+                  }
+                >
+                  Xem các phiếu tiêm
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  disabled={
+                    phieuDKTiem.TrangThai === 'Đã khám' &&
+                    phieuDKTiem.KetQuaKhamSL === 'Đạt'
+                  }
+                >
+                  Cập nhật phiếu đăng ký
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid item container spacing={2} alignContent="flex-start">
-            <Grid item xs={12}>
-              <Paper elevation={6} sx={{ borderRadius: 5 }}>
-                <PhieuDKTiemItem phieuDKTiem={phieuDKTiem} detail />
-              </Paper>
+            <Grid item container spacing={2} alignContent="flex-start">
+              <Grid item xs={12}>
+                <Paper elevation={6} sx={{ borderRadius: 5 }}>
+                  <PhieuDKTiemItem phieuDKTiem={phieuDKTiem} detail />
+                </Paper>
+              </Grid>
             </Grid>
-          </Grid>
 
-          <Grid item container>
-            <Grid item>
-              <Typography
-                variant="h6"
-                textTransform="uppercase"
-                color="primary"
-              >
-                Thông tin khách hàng của phiếu: {phieuDKTiem.MaPhieuDK}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} mt={2}>
-              <Paper elevation={6} sx={{ borderRadius: 5 }}>
-                <KhachHangItem khachHang={khachHang} />
-              </Paper>
-            </Grid>
-          </Grid>
-          {nguoiGiamHo?.MaNguoiGiamHo && (
             <Grid item container>
               <Grid item>
                 <Typography
@@ -146,101 +143,127 @@ const SheetDetail: NextPage<Props> = ({
                   textTransform="uppercase"
                   color="primary"
                 >
-                  Thông tin người giám hộ của phiếu: {phieuDKTiem.MaPhieuDK}
+                  Thông tin khách hàng của phiếu: {phieuDKTiem.MaPhieuDK}
                 </Typography>
               </Grid>
-
               <Grid item xs={12} mt={2}>
                 <Paper elevation={6} sx={{ borderRadius: 5 }}>
-                  <NguoiGiamHoItem nguoiGiamHo={nguoiGiamHo} />
+                  <KhachHangItem khachHang={khachHang} />
                 </Paper>
               </Grid>
             </Grid>
-          )}
+            {nguoiGiamHo?.MaNguoiGiamHo && (
+              <Grid item container>
+                <Grid item>
+                  <Typography
+                    variant="h6"
+                    textTransform="uppercase"
+                    color="primary"
+                  >
+                    Thông tin người giám hộ của phiếu: {phieuDKTiem.MaPhieuDK}
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <Paper elevation={6} sx={{ borderRadius: 5 }}>
+                    <NguoiGiamHoItem nguoiGiamHo={nguoiGiamHo} />
+                  </Paper>
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
         </Grid>
 
-        <Grid item container xs={8} spacing={4}>
-          {dsGoiTiem.length > 0 && (
-            <Grid item container spacing={6}>
-              <Grid
-                item
-                xs={12}
-                container
-                spacing={2}
-                alignContent="flex-start"
-              >
-                <Grid item xs={12}>
-                  <Typography
-                    variant="h6"
-                    textTransform="uppercase"
-                    color="primary"
-                  >
-                    Thông tin các gói tiêm
-                  </Typography>
-                </Grid>
-                {dsGoiTiem?.map((goiTiem) => (
-                  <Grid key={uuidv4()} item xs={4}>
-                    <Paper elevation={12} sx={{ borderRadius: 5 }}>
-                      <GoiTiemItem goiTiem={goiTiem} />
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          )}
-          {dsVacXin.length > 0 && (
-            <Grid item container spacing={6}>
-              <Grid
-                item
-                xs={12}
-                container
-                spacing={2}
-                alignContent="flex-start"
-              >
-                <Grid item xs={12}>
-                  <Typography
-                    variant="h6"
-                    textTransform="uppercase"
-                    color="primary"
-                  >
-                    Thông tin các vắc xin
-                  </Typography>
-                </Grid>
-                {dsVacXin?.map((vacXin) => (
-                  <Grid key={uuidv4()} item xs={4}>
-                    <Paper elevation={12} sx={{ borderRadius: 5 }}>
-                      <VaccineItem vaccine={vacXin} />
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          )}
-          <Grid item container spacing={6}>
-            <Grid item xs={12} container spacing={2} alignContent="flex-start">
-              <Grid item xs={12}>
-                <Typography
-                  variant="h6"
-                  textTransform="uppercase"
-                  color="primary"
+        <Grid item container xs={8}>
+          <Grid item container direction="column" spacing={4}>
+            {dsGoiTiem.length > 0 && (
+              <Grid item container spacing={6}>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  spacing={2}
+                  alignContent="flex-start"
                 >
-                  Hoá đơn
-                </Typography>
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="h6"
+                      textTransform="uppercase"
+                      color="primary"
+                    >
+                      Thông tin các gói tiêm
+                    </Typography>
+                  </Grid>
+                  {dsGoiTiem?.map((goiTiem) => (
+                    <Grid key={uuidv4()} item xs={4}>
+                      <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                        <GoiTiemItem goiTiem={goiTiem} />
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                {hoaDon?.MaHoaDon ? (
-                  <Paper elevation={12} sx={{ borderRadius: 5 }}>
-                    <HoaDonItem hoaDon={hoaDon} />
-                  </Paper>
-                ) : (
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    onClick={() => dispatch(modalSlice.actions.openModal())}
+            )}
+            {dsVacXin.length > 0 && (
+              <Grid item container spacing={6}>
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  spacing={2}
+                  alignContent="flex-start"
+                >
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="h6"
+                      textTransform="uppercase"
+                      color="primary"
+                    >
+                      Thông tin các vắc xin
+                    </Typography>
+                  </Grid>
+                  {dsVacXin?.map((vacXin) => (
+                    <Grid key={uuidv4()} item xs={4}>
+                      <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                        <VaccineItem vaccine={vacXin} />
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+            )}
+            <Grid item container spacing={6}>
+              <Grid
+                item
+                xs={12}
+                container
+                spacing={2}
+                alignContent="flex-start"
+              >
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    textTransform="uppercase"
+                    color="primary"
                   >
-                    Thanh toán
-                  </Button>
-                )}
+                    Hoá đơn
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  {hoaDon?.MaHoaDon ? (
+                    <Paper elevation={12} sx={{ borderRadius: 5 }}>
+                      <HoaDonItem hoaDon={hoaDon} />
+                    </Paper>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      onClick={() => dispatch(modalSlice.actions.openModal())}
+                    >
+                      Thanh toán
+                    </Button>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

@@ -37,13 +37,17 @@ const Sheets: NextPage<Props> = ({ dsPhieuDKTiem }) => {
     >
       <Grid container spacing={6}>
         <Grid item xs={12} container spacing={2} alignContent="flex-start">
-          {dsPhieuDKTiem?.map((item) => (
-            <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
-              <Paper elevation={6} sx={{ borderRadius: 5 }}>
-                <PhieuDKTiemItem phieuDKTiem={item} />
-              </Paper>
-            </Grid>
-          ))}
+          {dsPhieuDKTiem
+            ?.sort(
+              (a: PhieuDKTiem, b: PhieuDKTiem) => b.MaPhieuDK - a.MaPhieuDK
+            )
+            .map((item) => (
+              <Grid key={uuidv4()} item xs={12} md={6} lg={3}>
+                <Paper elevation={6} sx={{ borderRadius: 5 }}>
+                  <PhieuDKTiemItem phieuDKTiem={item} />
+                </Paper>
+              </Grid>
+            ))}
         </Grid>
       </Grid>
     </Layout>

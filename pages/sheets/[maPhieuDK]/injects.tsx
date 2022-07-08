@@ -17,6 +17,9 @@ import { v4 as uuidv4 } from 'uuid'
 import ListEmpty from '~/components/listEmpty'
 import { rowsPhieuTiem } from '~/src/utils'
 import dayjs from 'dayjs'
+import { useAppDispatch } from '~/redux/hook'
+import modalSlice from '~/components/modal/modalSlice'
+import ModalTaoPhieuTiem from '~/components/modalTaoPhieuTiem'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -46,6 +49,8 @@ interface Props {
   dsPhieuTiem: PhieuTiem[]
 }
 const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
+  const dispatch = useAppDispatch()
+
   return (
     <Layout
       title={`Phiếu tiêm của phiếu đăng ký ${dsPhieuTiem[0]?.MaPhieuDK}`}
@@ -94,14 +99,18 @@ const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
         </TableContainer>
       ) : (
         <Grid xs={12} container justifyContent="center" alignItems="center">
-          <Grid item container>
-            <ListEmpty />
-          </Grid>
-          <Grid item mt={6}>
-            <Button variant="contained"> Tạo phiếu tiêm</Button>
-          </Grid>
+          <ListEmpty />
         </Grid>
       )}
+      <Grid container justifyContent="center" mt={6}>
+        <Button
+          variant="contained"
+          onClick={() => dispatch(modalSlice.actions.openModal())}
+        >
+          Tạo phiếu tiêm
+        </Button>
+      </Grid>
+      <ModalTaoPhieuTiem />
     </Layout>
   )
 }
