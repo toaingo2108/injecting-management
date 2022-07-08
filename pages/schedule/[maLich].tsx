@@ -80,7 +80,7 @@ const ScheduleDetail: NextPage<Props> = ({
     setLoadingRegister(true)
     await dkLichLamViec(MaLich, MaNhanVien)
     setLoadingRegister(false)
-    router.reload()
+    router.push(`/schedule/${MaLich}`)
     dispatch(modalSlice.actions.closeModal())
   }
 

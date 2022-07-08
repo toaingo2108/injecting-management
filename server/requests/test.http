@@ -89,3 +89,14 @@ GET http://localhost:5000/api/goi-tiem/phieu-dk-tiem/1
 
 ###
 GET http://localhost:5000/api/nguoi-giam-ho/phieu-dk-tiem/27
+
+### 
+POST http://localhost:5000/api/phieu-tiem/temp
+Content-Type: application/json
+
+{
+    "MaPhieuDK": 101
+}
+
+###
+GET http://localhost:5000/api/phieu-tiem/phieu-dk-tiem/105

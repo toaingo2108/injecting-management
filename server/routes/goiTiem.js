@@ -14,7 +14,9 @@ const getVacXin = async (MaGoiTiem) => {
 router.get('/', async (req, res) => {
   try {
     let pool = await sql.connect(config)
-    const { recordset, output } = await pool.query('select * from GoiTiem')
+    const { recordset, output } = await pool.query(
+      'select * from GoiTiem where MaGoiTiem != 0'
+    )
     if (output.error) {
       return res.status(400).json({
         success: false,

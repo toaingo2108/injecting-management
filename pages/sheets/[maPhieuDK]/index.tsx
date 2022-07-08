@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from '@mui/material'
+import { Button, Grid, Paper, Typography } from '@mui/material'
 import { GetServerSideProps, NextPage } from 'next'
 import GoiTiemItem from '~/components/goiTiemItem'
 import KhachHangItem from '~/components/khachHangItem'
@@ -9,6 +9,8 @@ import { GoiTiem, KhachHang, NguoiGiamHo, PhieuDKTiem, VacXin } from '~/model'
 import { apiUrl } from '~/src/constants'
 import { v4 as uuidv4 } from 'uuid'
 import VaccineItem from '~/components/vaccineItem'
+import { getKhachHang } from '~/src/utils'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -22,10 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
     const phieuDKTiem: PhieuDKTiem = data.phieuDKTiem
 
-    const dataKhachHang = await fetch(
-      `${apiUrl}/khach-hang/${phieuDKTiem.MaKhachHang}`
-    ).then((data) => data.json())
-    const khachHang: KhachHang = dataKhachHang.khachHang
+    const khachHang: KhachHang = await getKhachHang(phieuDKTiem.MaKhachHang)
 
     const dataNguoiGiamHo = await fetch(
       `${apiUrl}/nguoi-giam-ho/phieu-dk-tiem/${phieuDKTiem.MaPhieuDK}`
@@ -66,6 +65,8 @@ const SheetDetail: NextPage<Props> = ({
   dsGoiTiem,
   dsVacXin,
 }) => {
+  const router = useRouter()
+
   return (
     <Layout
       title="Thông tin phiếu đăng ký tiêm"
@@ -73,6 +74,19 @@ const SheetDetail: NextPage<Props> = ({
     >
       <Grid container spacing={6}>
         <Grid item container xs={4} spacing={6}>
+          <Grid item container spacing={2} alignContent="flex-start">
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  router.push(`/sheets/${phieuDKTiem.MaPhieuDK}/injects`)
+                }
+              >
+                Xem các phiếu tiêm
+              </Button>
+            </Grid>
+          </Grid>
           <Grid item container spacing={2} alignContent="flex-start">
             <Grid item xs={12}>
               <Paper elevation={6} sx={{ borderRadius: 5 }}>

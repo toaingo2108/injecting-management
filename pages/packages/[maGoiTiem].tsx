@@ -48,20 +48,20 @@ const GoiTiemDetail: NextPage<Props> = ({ goiTiem }) => {
         <Table>
           <TableHead>
             <TableRow sx={{ whiteSpace: 'nowrap' }}>
-              <TableCell align="center">STT</TableCell>
-              <TableCell align="center">Phòng bệnh</TableCell>
-              <TableCell align="center">Tên vắc xin</TableCell>
-              <TableCell align="center">Nhà sản xuất</TableCell>
+              <TableCell>STT</TableCell>
+              <TableCell>Phòng bệnh</TableCell>
+              <TableCell>Tên vắc xin</TableCell>
+              <TableCell>Nhà sản xuất</TableCell>
               <TableCell align="center">Số lượng</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rowsGoiTiem(goiTiem).map((row, index) => (
               <TableRow key={uuidv4()}>
-                <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">{row.prevention}</TableCell>
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.origin}</TableCell>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{row.prevention}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.origin}</TableCell>
                 <TableCell align="center">{row.soLuong}</TableCell>
               </TableRow>
             ))}

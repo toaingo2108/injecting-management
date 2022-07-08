@@ -1,11 +1,13 @@
 import {
   Box,
   Button,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
 } from '@mui/material'
 import { GetServerSideProps, NextPage } from 'next'
 import React, { useState } from 'react'
@@ -54,9 +56,9 @@ const Schedule: NextPage<Props> = ({ dsLichLamViec }) => {
 
   const onSubmit: SubmitHandler<LichLamViec> = async (data) => {
     setLoadingRegister(true)
-    await taoLichLamViec(data)
+    const lichLamViec: LichLamViec = await taoLichLamViec(data)
     reset()
-    router.reload()
+    router.push(`/schedule/${lichLamViec.MaLich}`)
     setLoadingRegister(false)
   }
 
@@ -110,24 +112,17 @@ const Schedule: NextPage<Props> = ({ dsLichLamViec }) => {
                   name="Ca"
                   control={control}
                   render={({ field }) => (
-                    <Grid
-                      item
-                      container
-                      direction="row"
-                      justifyContent="flex-end"
-                    >
-                      <ToggleButtonGroup
-                        defaultValue={1}
-                        size="small"
-                        {...field}
-                        exclusive
-                        color="primary"
-                      >
-                        <ToggleButton value={1}>Ca 1</ToggleButton>
-                        <ToggleButton value={2}>Ca 2</ToggleButton>
-                        <ToggleButton value={3}>Ca 3</ToggleButton>
-                        <ToggleButton value={4}>Ca 4</ToggleButton>
-                      </ToggleButtonGroup>
+                    <Grid item container justifyContent="flex-end">
+                      <FormControl fullWidth variant="filled" size="small">
+                        <InputLabel>Ca làm việc</InputLabel>
+                        <Select {...field}>
+                          {[1, 2, 3, 4].map((item) => (
+                            <MenuItem key={uuidv4()} value={item}>
+                              Ca {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </Grid>
                   )}
                 />

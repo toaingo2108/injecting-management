@@ -17,8 +17,8 @@ import Layout from '~/components/layout'
 import ErrorAlert from '~/components/errorAlert'
 import {
   KhachHang,
-  NguoiGiamHo,
   PhieuDKTiem,
+  PhieuTiem,
   RegisterInjections,
   TrungTam,
 } from '~/model'
@@ -34,8 +34,10 @@ import {
   taoKhachHang,
   taoNguoiGiamHo,
   taoPhieuDKTiem,
+  taoPhieuTiem_temp,
 } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
@@ -64,6 +66,10 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
   const cartVaccines = useAppSelector((state) => state.cart.vaccines)
   const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
 
+  // const [maKhachHang, setMaKhachHang] = useState<number>(0)
+
+  const router = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -78,7 +84,6 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
     setLoadingRegister(true)
     console.log(data)
     const khachHang: KhachHang = await taoKhachHang(data.khachHang)
-
     if (khachHang) {
       data.phieuDKTiem = {
         ...data.phieuDKTiem,
@@ -91,21 +96,26 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
           MaKhachHang: khachHang.MaKhachHang,
           MaPhieuDK: phieuDKTiem.MaPhieuDK,
         }
-        const nguoiGiamHo: NguoiGiamHo = await taoNguoiGiamHo(data.nguoiGiamHo)
-        if (nguoiGiamHo) {
-          alert('Đang trong quá trình hoàn tất')
+        if (data.nguoiGiamHo.TenNguoiGiamHo !== '') {
+          await taoNguoiGiamHo(data.nguoiGiamHo)
         }
+        const phieuTiem: PhieuTiem = await taoPhieuTiem_temp(
+          phieuDKTiem.MaPhieuDK
+        )
         const { success } = await taoDKTiem(
           phieuDKTiem,
           data.MaTrungTam,
           data.NgayTiem,
-          cart
+          cart,
+          phieuTiem.MaPhieuTiem
         )
-        if (success) alert('THÀNH CÔNG')
-        else alert('THẤT BẠI')
+        if (success) {
+          alert('THÀNH CÔNG')
+          router.push(`/sheets/${phieuDKTiem.MaPhieuDK}`)
+          reset()
+        } else alert('THẤT BẠI')
       }
     }
-    // reset()
     setLoadingRegister(false)
   }
 
@@ -270,15 +280,9 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                     <TextField
                       size="small"
                       label="Họ tên người giám hộ"
-                      {...register('nguoiGiamHo.TenNguoiGiamHo', {
-                        validate: (value) => value !== '',
-                      })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.nguoiGiamHo?.TenNguoiGiamHo && (
-                      <ErrorAlert message="Vui lòng điền tên người giám hộ" />
-                    )}
                   </Grid>
                 )}
               />
@@ -294,15 +298,9 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                     <TextField
                       size="small"
                       label="Mối quan hệ với người tiêm"
-                      {...register('nguoiGiamHo.MoiQuanHe', {
-                        validate: (value) => value !== '',
-                      })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.nguoiGiamHo?.MoiQuanHe && (
-                      <ErrorAlert message="Vui lòng điền mối quan hệ với người tiêm" />
-                    )}
                   </Grid>
                 )}
               />
@@ -318,15 +316,9 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                     <TextField
                       size="small"
                       label="Số điện thoại người giám hộ"
-                      {...register('nguoiGiamHo.SoDienThoai', {
-                        validate: (value) => value !== '',
-                      })}
                       variant="outlined"
                       {...field}
                     />
-                    {errors.nguoiGiamHo?.SoDienThoai && (
-                      <ErrorAlert message="Vui lòng điền số điện thoại người giám hộ" />
-                    )}
                   </Grid>
                 )}
               />
@@ -357,7 +349,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
               <Controller
                 name="phieuDKTiem.TrangThai"
                 control={control}
-                defaultValue=""
+                defaultValue="Chưa khám"
                 render={({ field }) => (
                   <Grid container direction="column">
                     <Grid item>
@@ -391,7 +383,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
               <Controller
                 name="phieuDKTiem.KetQuaKhamSL"
                 control={control}
-                defaultValue=""
+                defaultValue="Không đạt"
                 render={({ field }) => (
                   <Grid container direction="column">
                     <Grid item>
@@ -403,7 +395,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                             validate: (value) => value !== '',
                           })}
                         >
-                          {['Đạt', 'Không đạt'].map((item) => (
+                          {['Không đạt', 'Đạt'].map((item) => (
                             <MenuItem key={uuidv4()} value={item}>
                               {item}
                             </MenuItem>
@@ -530,9 +522,6 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
               </Button>
             </Grid>
             <Grid item xs={12} sm={2}>
-              {/* <Button type="submit" variant="contained" fullWidth size="large">
-                Hoàn thành đăng ký
-              </Button> */}
               <LoadingButton
                 loading={loadingRegister}
                 type="submit"
@@ -541,6 +530,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                 startIcon={<SaveIcon />}
                 variant="contained"
                 size="large"
+                disabled={cartGoiTiem.length === 0 && cartVaccines.length === 0}
               >
                 Hoàn thành đăng ký
               </LoadingButton>

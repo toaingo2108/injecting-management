@@ -10,10 +10,9 @@ import {
 } from '@mui/material'
 import { BallotOutlined, ClearOutlined } from '@mui/icons-material'
 import cartSlice from '~/components/cart/cartSlice'
-import vaccineImage from '~/public/img/vaccine.png'
-import Image from 'next/image'
 import Link from 'next/link'
 import { v4 as uuidv4 } from 'uuid'
+import ListEmpty from '../listEmpty'
 
 const Cart = () => {
   const cartVaccines = useAppSelector((state) => state.cart.vaccines)
@@ -47,17 +46,7 @@ const Cart = () => {
 
       {cartVaccines.length === 0 && cartGoiTiem.length === 0 ? (
         <CardContent>
-          <Grid container justifyContent="center" alignItems="center">
-            <Image src={vaccineImage} alt="empty" width={100} height={100} />
-          </Grid>
-          <Typography
-            variant="h5"
-            color="text.secondary"
-            textAlign="center"
-            mt={2}
-          >
-            DANH SÁCH TRỐNG
-          </Typography>
+          <ListEmpty />
         </CardContent>
       ) : (
         <>

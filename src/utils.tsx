@@ -7,6 +7,7 @@ import {
   NguoiGiamHo,
   PhieuDKTiem,
   PhieuDKTiem_GoiTiem,
+  PhieuTiem,
   VacXin,
 } from '~/model'
 import { apiUrl } from './constants'
@@ -80,6 +81,19 @@ export const taoNguoiGiamHo = async (nguoiGiamHo: NguoiGiamHo) => {
       notFound: true,
     }
   }
+}
+
+export const rowsPhieuTiem = (dsPhieuTiem: PhieuTiem[]) => {
+  return dsPhieuTiem.map((item, index) => ({
+    id: index + 1,
+    MaPhieuTiem: item.MaPhieuTiem,
+    MaNhanVien: item.MaNhanVien,
+    NgayTiem: item.NgayTiem,
+    KetQuaKham: item.KetQuaKham,
+    KetQuaSauTiem: item.KetQuaSauTiem,
+    TrangThai: item.TrangThai,
+    STT: item.STT,
+  }))
 }
 
 export const rowsGoiTiem = (goiTiem: GoiTiem) => {
@@ -182,7 +196,8 @@ export const taoDKTiem = async (
   phieuDKTiem: PhieuDKTiem,
   MaTrungTam: number,
   NgayTiem: string,
-  cart: CartState
+  cart: CartState,
+  MaPhieuTiem: number
 ) => {
   try {
     if (cart.goiTiem.length > 0) {
@@ -201,7 +216,7 @@ export const taoDKTiem = async (
             MaGoiTiem: goiTiem.MaGoiTiem,
             MaVacXin: vacXin.MaVacXin,
             SoLuong: vacXin.SoLuong,
-            MaPhieuTiem: 0,
+            MaPhieuTiem: MaPhieuTiem,
             TinhTrang: '',
             GhiChu: '',
           })
@@ -217,7 +232,7 @@ export const taoDKTiem = async (
           MaGoiTiem: 0,
           MaVacXin: vacXin.MaVacXin,
           SoLuong: 1,
-          MaPhieuTiem: 0,
+          MaPhieuTiem: MaPhieuTiem,
           TinhTrang: '',
           GhiChu: '',
         })
@@ -225,8 +240,36 @@ export const taoDKTiem = async (
     }
     return { success: true }
   } catch (error) {
+    console.log(error)
     return {
       success: false,
+    }
+  }
+}
+
+export const getKhachHang = async (MaKhachHang: number) => {
+  const res = await fetch(`${apiUrl}/khach-hang/${MaKhachHang}`)
+  const data = await res.json()
+  const khachHang: KhachHang = data.khachHang
+  return khachHang
+}
+
+export const taoPhieuTiem_temp = async (MaPhieuDK: number) => {
+  try {
+    const res = await fetch(`${apiUrl}/phieu-tiem/temp`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ MaPhieuDK }),
+    })
+    const data = await res.json()
+    return data.phieuTiem
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true,
     }
   }
 }
