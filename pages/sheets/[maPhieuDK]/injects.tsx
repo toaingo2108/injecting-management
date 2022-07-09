@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid'
 import ListEmpty from '~/components/listEmpty'
 import { rowsPhieuTiem } from '~/src/utils'
 import dayjs from 'dayjs'
-import { useAppDispatch } from '~/redux/hook'
+// import { useAppDispatch } from '~/redux/hook'
 // import modalSlice from '~/components/modal/modalSlice'
 // import ModalTaoPhieuTiem from '~/components/modalTaoPhieuTiem'
 import { Edit } from '@mui/icons-material'
@@ -51,7 +51,7 @@ interface Props {
   dsPhieuTiem: PhieuTiem[]
 }
 const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
 
   return (
     <Layout
