@@ -92,7 +92,7 @@ const Cart = () => {
       setKhachHangOld(khachHang)
     }
     getKH()
-  }, [maKhachHang])
+  }, [maKhachHang, dispatch])
 
   return (
     <>
