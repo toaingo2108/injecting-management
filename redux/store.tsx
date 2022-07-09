@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import cartSlice from '~/components/cart/cartSlice'
 import modalSlice from '~/components/modal/modalSlice'
+import myAlertSlice from '~/components/myAlert/myAlertSlice'
 import searchSlice from '~/components/search/searchSlice'
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     cart: cartSlice.reducer,
     modal: modalSlice.reducer,
     search: searchSlice.reducer,
+    myAlert: myAlertSlice.reducer,
   },
 })
 

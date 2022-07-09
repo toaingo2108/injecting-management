@@ -26,6 +26,7 @@ import {
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
+import myAlertSlice from '../myAlert/myAlertSlice'
 
 const Cart = () => {
   const cart = useAppSelector((state) => state.cart)
@@ -73,6 +74,21 @@ const Cart = () => {
   useEffect(() => {
     async function getKH() {
       const khachHang: KhachHang = await getKhachHang(maKhachHang)
+      if (khachHang) {
+        dispatch(
+          myAlertSlice.actions.openAlert({
+            title: 'Mã nhân viên hợp lệ',
+            type: 'success',
+          })
+        )
+      } else {
+        dispatch(
+          myAlertSlice.actions.openAlert({
+            title: 'Mã nhân viên không hợp lệ',
+            type: 'error',
+          })
+        )
+      }
       setKhachHangOld(khachHang)
     }
     getKH()

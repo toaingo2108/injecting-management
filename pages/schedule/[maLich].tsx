@@ -23,6 +23,7 @@ import { useAppDispatch } from '~/redux/hook'
 import modalSlice from '~/components/modal/modalSlice'
 import { dkLichLamViec } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
+import myAlertSlice from '~/components/myAlert/myAlertSlice'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -78,10 +79,25 @@ const ScheduleDetail: NextPage<Props> = ({
 
   const handleDKLichLamViec = async (MaLich: number, MaNhanVien: number) => {
     setLoadingRegister(true)
-    await dkLichLamViec(MaLich, MaNhanVien)
+    const res = await dkLichLamViec(MaLich, MaNhanVien)
+    if (res) {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Thêm nhân viên vào lịch thành công',
+          type: 'success',
+        })
+      )
+      router.push(`/schedule/${MaLich}`)
+      dispatch(modalSlice.actions.closeModal())
+    } else {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Thêm nhân viên vào lịch thất bại',
+          type: 'error',
+        })
+      )
+    }
     setLoadingRegister(false)
-    router.push(`/schedule/${MaLich}`)
-    dispatch(modalSlice.actions.closeModal())
   }
 
   return (

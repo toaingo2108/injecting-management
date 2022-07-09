@@ -19,11 +19,12 @@ import { v4 as uuidv4 } from 'uuid'
 import ListEmpty from '~/components/listEmpty'
 import { capNhatKetQuaPhieuTiem, rowsPhieuTiem } from '~/src/utils'
 import dayjs from 'dayjs'
-// import { useAppDispatch } from '~/redux/hook'
+import { useAppDispatch } from '~/redux/hook'
 // import modalSlice from '~/components/modal/modalSlice'
 // import ModalTaoPhieuTiem from '~/components/modalTaoPhieuTiem'
 import { Check, DoDisturbOn } from '@mui/icons-material'
 import { useRouter } from 'next/router'
+import myAlertSlice from '~/components/myAlert/myAlertSlice'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -53,7 +54,7 @@ interface Props {
   dsPhieuTiem: PhieuTiem[]
 }
 const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
   const router = useRouter()
 
@@ -66,7 +67,20 @@ const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
       KetQuaSauTiem
     )
     if (phieuTiem) {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Thay đổi kết quả sau tiêm thành công',
+          type: 'success',
+        })
+      )
       router.push(router.asPath)
+    } else {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Thay đổi kết quả sau tiêm thất bại',
+          type: 'error',
+        })
+      )
     }
   }
 

@@ -26,7 +26,7 @@ import { RestartAlt } from '@mui/icons-material'
 import SaveIcon from '@mui/icons-material/Save'
 import LoadingButton from '@mui/lab/LoadingButton'
 import VaccineItem from '~/components/vaccineItem'
-import { useAppSelector } from '~/redux/hook'
+import { useAppDispatch, useAppSelector } from '~/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
 import GoiTiemItem from '~/components/goiTiemItem'
 import {
@@ -39,6 +39,7 @@ import {
 } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
 import { useRouter } from 'next/router'
+import myAlertSlice from '~/components/myAlert/myAlertSlice'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
@@ -66,7 +67,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
   const cart = useAppSelector((state) => state.cart)
   const cartVaccines = useAppSelector((state) => state.cart.vaccines)
   const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
-
+  const dispatch = useAppDispatch()
   const [maKhachHang, setMaKhachHang] = useState<number>(0)
   const [khachHangOld, setKhachHangOld] = useState<KhachHang>()
   useEffect(() => {
@@ -136,8 +137,21 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
           phieuTiem.MaPhieuTiem
         )
         if (success) {
+          dispatch(
+            myAlertSlice.actions.openAlert({
+              title: 'Đăng ký thành công',
+              type: 'success',
+            })
+          )
           router.push(`/sheets/${phieuDKTiem.MaPhieuDK}`)
           reset()
+        } else {
+          dispatch(
+            myAlertSlice.actions.openAlert({
+              title: 'Đăng ký thất bại',
+              type: 'error',
+            })
+          )
         }
       }
     }

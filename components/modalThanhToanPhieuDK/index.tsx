@@ -22,6 +22,7 @@ import { getDsNhanVienTrungTam, taoHoaDon, totalPriceCart } from '~/src/utils'
 import { useAppDispatch } from '~/redux/hook'
 import modalSlice from '../modal/modalSlice'
 import { useRouter } from 'next/router'
+import myAlertSlice from '../myAlert/myAlertSlice'
 
 interface Props {
   phieuDKTiem: PhieuDKTiem
@@ -74,10 +75,21 @@ const ModalThanhToanPhieuDK = ({
     setValue('TongTien', tongTienThanhToan)
     const hoaDon = await taoHoaDon(data)
     if (hoaDon) {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Thanh toán thành công',
+          type: 'success',
+        })
+      )
       router.push(`/sheets/${phieuDKTiem.MaPhieuDK}`)
       dispatch(modalSlice.actions.closeModal())
     } else {
-      alert('Bạn vui lòng thanh toán lại, có sự cố')
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Bạn vui lòng thanh toán lại, đã có sự cố',
+          type: 'warning',
+        })
+      )
     }
     setLoadingRegister(false)
   }

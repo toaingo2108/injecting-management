@@ -9,6 +9,7 @@ import Loader from '~/components/loader'
 import { Provider } from 'react-redux'
 import { store } from '~/redux/store'
 import { Box } from '@mui/material'
+import MyAlert from '~/components/myAlert'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 
@@ -35,6 +36,7 @@ export default function MyApp(props: AppProps) {
           <CssBaseline />
           <Box position="relative">
             <Loader isLoading={loading} />
+            <MyAlert />
             <Component {...pageProps} />
           </Box>
         </ThemeProvider>

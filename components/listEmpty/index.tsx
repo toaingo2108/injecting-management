@@ -3,7 +3,11 @@ import { Grid, Typography } from '@mui/material'
 import Image from 'next/image'
 import vaccineImage from '~/public/img/vaccine.png'
 
-const ListEmpty = () => {
+interface Props {
+  title?: string
+}
+
+const ListEmpty = ({ title = 'DANH SÁCH TRỐNG' }: Props) => {
   return (
     <>
       <Grid
@@ -19,7 +23,7 @@ const ListEmpty = () => {
           textAlign="center"
           mt={2}
         >
-          DANH SÁCH TRỐNG
+          {title}
         </Typography>
       </Grid>
     </>

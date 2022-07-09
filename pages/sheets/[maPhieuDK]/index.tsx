@@ -29,6 +29,7 @@ import ModalThanhToanPhieuDK from '~/components/modalThanhToanPhieuDK'
 import { LoadingButton } from '@mui/lab'
 import { AddCircle, CheckCircle } from '@mui/icons-material'
 import { useState } from 'react'
+import myAlertSlice from '~/components/myAlert/myAlertSlice'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -105,14 +106,35 @@ const SheetDetail: NextPage<Props> = ({
 
   const handleDuyetPhieuDKTiem = async (MaPhieuDK: number) => {
     setLoadingRegister(true)
-    await duyetPhieuDKTiem(MaPhieuDK)
-    router.push(router.asPath)
+    const phieuDKTiem: PhieuDKTiem = await duyetPhieuDKTiem(MaPhieuDK)
+    if (phieuDKTiem) {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Duyệt phiếu thành công',
+          type: 'success',
+        })
+      )
+      router.push(router.asPath)
+    } else {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Duyệt phiếu thất bại',
+          type: 'error',
+        })
+      )
+    }
     setLoadingRegister(false)
   }
 
   const handleAutoCreateDsPhieuTiem = async (MaPhieuDK: number) => {
     setLoadingRegister(true)
     await autoCreateDsPhieuTiem(MaPhieuDK)
+    dispatch(
+      myAlertSlice.actions.openAlert({
+        title: 'Tạo phiếu tiêm thành công',
+        type: 'success',
+      })
+    )
     router.push(router.asPath + '/injects')
     setLoadingRegister(false)
   }

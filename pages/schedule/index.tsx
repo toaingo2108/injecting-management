@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import { taoLichLamViec } from '~/src/utils'
 import { apiUrl } from '~/src/constants'
+import myAlertSlice from '~/components/myAlert/myAlertSlice'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
@@ -58,7 +59,23 @@ const Schedule: NextPage<Props> = ({ dsLichLamViec }) => {
     setLoadingRegister(true)
     const lichLamViec: LichLamViec = await taoLichLamViec(data)
     reset()
-    router.push(`/schedule/${lichLamViec.MaLich}`)
+    if (lichLamViec) {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Tạo lịch thành công',
+          type: 'success',
+        })
+      )
+      dispatch(modalSlice.actions.closeModal())
+      router.push(`/schedule/${lichLamViec.MaLich}`)
+    } else {
+      dispatch(
+        myAlertSlice.actions.openAlert({
+          title: 'Tạo lịch thất bại',
+          type: 'error',
+        })
+      )
+    }
     setLoadingRegister(false)
   }
 
