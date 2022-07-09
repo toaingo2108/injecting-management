@@ -18,7 +18,12 @@ const MyAlert = () => {
   }
 
   return (
-    <Snackbar open={isOpen} autoHideDuration={3000} onClose={handleClose}>
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isOpen}
+      autoHideDuration={3000}
+      onClose={handleClose}
+    >
       <Alert variant="filled" severity={type}>
         {title}
       </Alert>

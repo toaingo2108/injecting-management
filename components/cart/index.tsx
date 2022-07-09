@@ -77,14 +77,14 @@ const Cart = () => {
       if (khachHang) {
         dispatch(
           myAlertSlice.actions.openAlert({
-            title: 'Mã nhân viên hợp lệ',
+            title: 'Mã khách hàng hợp lệ',
             type: 'success',
           })
         )
       } else {
         dispatch(
           myAlertSlice.actions.openAlert({
-            title: 'Mã nhân viên không hợp lệ',
+            title: 'Mã khách hàng không hợp lệ',
             type: 'error',
           })
         )
