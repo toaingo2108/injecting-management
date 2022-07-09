@@ -6,15 +6,29 @@ import {
   Divider,
   Grid,
   IconButton,
+  TextField,
   Typography,
 } from '@mui/material'
 import { BallotOutlined, ClearOutlined } from '@mui/icons-material'
 import cartSlice from '~/components/cart/cartSlice'
 import Link from 'next/link'
 import { v4 as uuidv4 } from 'uuid'
-import ListEmpty from '../listEmpty'
+import ListEmpty from '~/components/listEmpty'
+import modalSlice from '~/components/modal/modalSlice'
+import ModalThanhToanPhieuDK from '../modalThanhToanPhieuDK'
+import { KhachHang, PhieuDKTiem, PhieuTiem } from '~/model'
+import {
+  getKhachHang,
+  taoDKTiem,
+  taoPhieuDKTiem,
+  taoPhieuTiem_temp,
+} from '~/src/utils'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+import { LoadingButton } from '@mui/lab'
 
 const Cart = () => {
+  const cart = useAppSelector((state) => state.cart)
   const cartVaccines = useAppSelector((state) => state.cart.vaccines)
   const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
   const dispatch = useAppDispatch()
@@ -25,6 +39,44 @@ const Cart = () => {
   const handleDeleteGoiTiemCart = (MaGoiTiem: number) => {
     dispatch(cartSlice.actions.removeGoiTiemFromCart(MaGoiTiem))
   }
+  const [phieuDKDatMua, setPhieuDKDatMua] = useState<PhieuDKTiem>()
+  const [maKhachHang, setMaKhachHang] = useState<number>(0)
+  const [khachHangOld, setKhachHangOld] = useState<KhachHang>()
+
+  const [loadingButton, setLoadingButton] = useState(false)
+
+  const handleTaoPhieuDKDatMua = async () => {
+    setLoadingButton(true)
+    const phieuDKDatMua = await taoPhieuDKTiem({
+      MaPhieuDK: 0,
+      MaKhachHang: khachHangOld?.MaKhachHang ? khachHangOld?.MaKhachHang : 1,
+      NgayLap: dayjs(new Date()).format('YYYY-MM-DD'),
+      KetQuaKhamSL: 'Không đạt',
+      TrangThai: 'Chưa khám',
+      STT: Math.floor(Math.random() + 101),
+    })
+    setPhieuDKDatMua(phieuDKDatMua)
+    const phieuTiem: PhieuTiem = await taoPhieuTiem_temp(
+      phieuDKDatMua.MaPhieuDK
+    )
+    await taoDKTiem(
+      phieuDKDatMua,
+      1,
+      dayjs(new Date()).format('YYYY-MM-DD'),
+      cart,
+      phieuTiem.MaPhieuTiem
+    )
+    setLoadingButton(false)
+    dispatch(modalSlice.actions.openModal())
+  }
+
+  useEffect(() => {
+    async function getKH() {
+      const khachHang: KhachHang = await getKhachHang(maKhachHang)
+      setKhachHangOld(khachHang)
+    }
+    getKH()
+  }, [maKhachHang])
 
   return (
     <>
@@ -144,17 +196,34 @@ const Cart = () => {
       <CardContent>
         <Grid container direction="column" spacing={2}>
           <Grid item>
-            <Link href="/injections/order">
-              <Button
-                variant="contained"
-                fullWidth
-                color="warning"
-                size="large"
-                disabled={cartVaccines.length === 0 && cartGoiTiem.length === 0}
-              >
-                Tới trang đặt mua
-              </Button>
-            </Link>
+            <TextField
+              value={maKhachHang}
+              onChange={(e) => setMaKhachHang(+e.target.value)}
+              type="number"
+              label="Mã khách hàng"
+              fullWidth
+              size="small"
+            />
+          </Grid>
+          <Grid item>
+            <LoadingButton
+              loading={loadingButton}
+              variant="contained"
+              fullWidth
+              color="warning"
+              size="large"
+              disabled={
+                (cartVaccines.length === 0 && cartGoiTiem.length === 0) ||
+                typeof khachHangOld === 'undefined' ||
+                maKhachHang === 0
+              }
+              onClick={() => handleTaoPhieuDKDatMua()}
+            >
+              Đặt mua
+            </LoadingButton>
+          </Grid>
+          <Grid item>
+            <Divider />
           </Grid>
           <Grid item>
             <Link href="/injections/register">
@@ -171,6 +240,14 @@ const Cart = () => {
           </Grid>
         </Grid>
       </CardContent>
+      {typeof phieuDKDatMua !== 'undefined' && (
+        <ModalThanhToanPhieuDK
+          phieuDKTiem={phieuDKDatMua}
+          dsGoiTiem={cartGoiTiem}
+          dsVacXin={cartVaccines}
+          isDatMua
+        />
+      )}
     </>
   )
 }

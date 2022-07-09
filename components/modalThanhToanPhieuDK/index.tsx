@@ -27,9 +27,15 @@ interface Props {
   phieuDKTiem: PhieuDKTiem
   dsGoiTiem: GoiTiem[]
   dsVacXin: VacXin[]
+  isDatMua?: boolean
 }
 
-const ModalThanhToanPhieuDK = ({ phieuDKTiem, dsGoiTiem, dsVacXin }: Props) => {
+const ModalThanhToanPhieuDK = ({
+  phieuDKTiem,
+  dsGoiTiem,
+  dsVacXin,
+  isDatMua,
+}: Props) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const {
@@ -66,10 +72,14 @@ const ModalThanhToanPhieuDK = ({ phieuDKTiem, dsGoiTiem, dsVacXin }: Props) => {
   const onSubmit: SubmitHandler<HoaDon> = async (data) => {
     setLoadingRegister(true)
     setValue('TongTien', tongTienThanhToan)
-    await taoHoaDon(data)
-    router.push(router.asPath)
+    const hoaDon = await taoHoaDon(data)
+    if (hoaDon) {
+      router.push(`/sheets/${phieuDKTiem.MaPhieuDK}`)
+      dispatch(modalSlice.actions.closeModal())
+    } else {
+      alert('Bạn vui lòng thanh toán lại, có sự cố')
+    }
     setLoadingRegister(false)
-    dispatch(modalSlice.actions.closeModal())
   }
 
   let yourDate = dayjs(new Date()).format('YYYY-MM-DD')
@@ -79,7 +89,8 @@ const ModalThanhToanPhieuDK = ({ phieuDKTiem, dsGoiTiem, dsVacXin }: Props) => {
       <Grid container direction="column">
         <Grid item>
           <Typography variant="h5" color="primary" fontWeight="bold">
-            Thanh toán phiếu đăng ký [{phieuDKTiem.MaPhieuDK}]
+            Thanh toán phiếu {isDatMua ? 'đặt mua' : 'đăng ký'} [
+            {phieuDKTiem.MaPhieuDK}]
           </Typography>
         </Grid>
         <Grid item>

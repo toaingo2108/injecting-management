@@ -16,12 +16,19 @@ import {
 import { apiUrl } from '~/src/constants'
 import { v4 as uuidv4 } from 'uuid'
 import VaccineItem from '~/components/vaccineItem'
-import { getKhachHang } from '~/src/utils'
+import {
+  autoCreateDsPhieuTiem,
+  duyetPhieuDKTiem,
+  getKhachHang,
+} from '~/src/utils'
 import { useRouter } from 'next/router'
 import HoaDonItem from '~/components/hoaDonItem'
 import { useAppDispatch } from '~/redux/hook'
 import modalSlice from '~/components/modal/modalSlice'
 import ModalThanhToanPhieuDK from '~/components/modalThanhToanPhieuDK'
+import { LoadingButton } from '@mui/lab'
+import { AddCircle, CheckCircle } from '@mui/icons-material'
+import { useState } from 'react'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -94,6 +101,22 @@ const SheetDetail: NextPage<Props> = ({
 
   const dispatch = useAppDispatch()
 
+  const [loadingRegister, setLoadingRegister] = useState(false)
+
+  const handleDuyetPhieuDKTiem = async (MaPhieuDK: number) => {
+    setLoadingRegister(true)
+    await duyetPhieuDKTiem(MaPhieuDK)
+    router.push(router.asPath)
+    setLoadingRegister(false)
+  }
+
+  const handleAutoCreateDsPhieuTiem = async (MaPhieuDK: number) => {
+    setLoadingRegister(true)
+    await autoCreateDsPhieuTiem(MaPhieuDK)
+    router.push(router.asPath + '/injects')
+    setLoadingRegister(false)
+  }
+
   return (
     <Layout
       title="Thông tin phiếu đăng ký tiêm"
@@ -115,17 +138,42 @@ const SheetDetail: NextPage<Props> = ({
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  disabled={
-                    phieuDKTiem.TrangThai === 'Đã khám' &&
-                    phieuDKTiem.KetQuaKhamSL === 'Đạt'
-                  }
-                >
-                  Cập nhật phiếu đăng ký
-                </Button>
+                {hoaDon?.MaHoaDon && (
+                  <>
+                    {phieuDKTiem.TrangThai === 'Đã khám' &&
+                    phieuDKTiem.KetQuaKhamSL === 'Đạt' ? (
+                      <LoadingButton
+                        loading={loadingRegister}
+                        type="submit"
+                        loadingPosition="start"
+                        fullWidth
+                        startIcon={<AddCircle />}
+                        variant="contained"
+                        color="secondary"
+                        onClick={() =>
+                          handleAutoCreateDsPhieuTiem(phieuDKTiem.MaPhieuDK)
+                        }
+                      >
+                        Tạo phiếu tiêm
+                      </LoadingButton>
+                    ) : (
+                      <LoadingButton
+                        loading={loadingRegister}
+                        type="submit"
+                        loadingPosition="start"
+                        fullWidth
+                        startIcon={<CheckCircle />}
+                        variant="contained"
+                        color="info"
+                        onClick={() =>
+                          handleDuyetPhieuDKTiem(phieuDKTiem.MaPhieuDK)
+                        }
+                      >
+                        Duyệt phiếu đăng ký
+                      </LoadingButton>
+                    )}
+                  </>
+                )}
               </Grid>
             </Grid>
             <Grid item container spacing={2} alignContent="flex-start">

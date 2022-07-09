@@ -1,6 +1,7 @@
 import {
-  Button,
+  // Button,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -18,8 +19,9 @@ import ListEmpty from '~/components/listEmpty'
 import { rowsPhieuTiem } from '~/src/utils'
 import dayjs from 'dayjs'
 import { useAppDispatch } from '~/redux/hook'
-import modalSlice from '~/components/modal/modalSlice'
-import ModalTaoPhieuTiem from '~/components/modalTaoPhieuTiem'
+// import modalSlice from '~/components/modal/modalSlice'
+// import ModalTaoPhieuTiem from '~/components/modalTaoPhieuTiem'
+import { Edit } from '@mui/icons-material'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -77,6 +79,7 @@ const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
                 <TableCell>Kết quả sau tiêm</TableCell>
                 <TableCell>Trạng thái</TableCell>
                 <TableCell align="center">STT</TableCell>
+                <TableCell align="center">+</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -92,17 +95,22 @@ const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
                   <TableCell>{row.KetQuaSauTiem}</TableCell>
                   <TableCell>{row.TrangThai}</TableCell>
                   <TableCell align="center">{row.STT}</TableCell>
+                  <TableCell align="center">
+                    <IconButton size="small">
+                      <Edit />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       ) : (
-        <Grid xs={12} container justifyContent="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
           <ListEmpty />
         </Grid>
       )}
-      <Grid container justifyContent="center" mt={6}>
+      {/* <Grid container justifyContent="center" mt={6}>
         <Button
           variant="contained"
           onClick={() => dispatch(modalSlice.actions.openModal())}
@@ -110,7 +118,7 @@ const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
           Tạo phiếu tiêm
         </Button>
       </Grid>
-      <ModalTaoPhieuTiem />
+      <ModalTaoPhieuTiem /> */}
     </Layout>
   )
 }

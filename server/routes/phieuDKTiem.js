@@ -84,4 +84,32 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.put('/:MaPhieuDK', async (req, res) => {
+  try {
+    let pool = await sql.connect(config)
+    const { recordset, output } = await pool.query(
+      `update PhieuDangKyTiem set KetQuaKhamSL = N'Đạt', TrangThai = N'Đã khám'
+      output inserted.*
+      where MaPhieuDK = ${req.params.MaPhieuDK}`
+    )
+    if (output.error) {
+      return res.status(400).json({
+        success: false,
+        message: output.error,
+      })
+    }
+
+    res.json({
+      success: true,
+      phieuDKTiem: recordset[0],
+    })
+  } catch (error) {
+    console.log(error.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi hệ thống',
+    })
+  }
+})
+
 module.exports = router

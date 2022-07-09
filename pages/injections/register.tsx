@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GetServerSideProps, NextPage } from 'next'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import {
@@ -30,6 +30,7 @@ import { useAppSelector } from '~/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
 import GoiTiemItem from '~/components/goiTiemItem'
 import {
+  getKhachHang,
   taoDKTiem,
   taoKhachHang,
   taoNguoiGiamHo,
@@ -66,7 +67,17 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
   const cartVaccines = useAppSelector((state) => state.cart.vaccines)
   const cartGoiTiem = useAppSelector((state) => state.cart.goiTiem)
 
-  // const [maKhachHang, setMaKhachHang] = useState<number>(0)
+  const [maKhachHang, setMaKhachHang] = useState<number>(0)
+  const [khachHangOld, setKhachHangOld] = useState<KhachHang>()
+  useEffect(() => {
+    async function getKH() {
+      const khachHang: KhachHang = await getKhachHang(maKhachHang)
+      if (khachHang) {
+        setKhachHangOld(khachHang)
+      }
+    }
+    getKH()
+  }, [maKhachHang])
 
   const router = useRouter()
 
@@ -75,14 +86,30 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<RegisterInjections>()
+
+  useEffect(() => {
+    if (typeof khachHangOld !== 'undefined') {
+      setValue('khachHang', khachHangOld)
+      setValue(
+        'khachHang.NgaySinh',
+        dayjs(khachHangOld.NgaySinh).format('YYYY-MM-DD')
+      )
+    }
+  }, [khachHangOld, setValue])
 
   const [loadingRegister, setLoadingRegister] = useState(false)
 
   const onSubmit: SubmitHandler<RegisterInjections> = async (data) => {
     setLoadingRegister(true)
-    const khachHang: KhachHang = await taoKhachHang(data.khachHang)
+    let khachHang: KhachHang
+    if (khachHangOld) {
+      khachHang = khachHangOld
+    } else {
+      khachHang = await taoKhachHang(data.khachHang)
+    }
     if (khachHang) {
       data.phieuDKTiem = {
         ...data.phieuDKTiem,
@@ -109,10 +136,9 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
           phieuTiem.MaPhieuTiem
         )
         if (success) {
-          alert('THÀNH CÔNG')
           router.push(`/sheets/${phieuDKTiem.MaPhieuDK}`)
           reset()
-        } else alert('THẤT BẠI')
+        }
       }
     }
     setLoadingRegister(false)
@@ -130,6 +156,19 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
       <Box component="form" onSubmit={handleSubmit(onSubmit)} mt={6}>
         <Grid container direction="row" spacing={4}>
           <Grid item container spacing={2}>
+            <Grid item container xs={12} spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={maKhachHang}
+                  onChange={(e) => setMaKhachHang(+e.target.value)}
+                  size="small"
+                  label="Mã khách hàng nếu bạn là khách hàng thân thiết"
+                  variant="outlined"
+                />
+              </Grid>
+            </Grid>
             <Grid item xs={12} sm={6}>
               <Controller
                 name="khachHang.TenKhachHang"
@@ -355,6 +394,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                       <FormControl fullWidth variant="filled">
                         <InputLabel>Trạng thái khám sàn lọc</InputLabel>
                         <Select
+                          disabled
                           {...field}
                           {...register('phieuDKTiem.TrangThai', {
                             validate: (value) => value !== '',
@@ -389,6 +429,7 @@ const ScheduleRegister: NextPage<Props> = ({ dsTrungTam }) => {
                       <FormControl fullWidth variant="filled">
                         <InputLabel>Kết quả khám sàn lọc</InputLabel>
                         <Select
+                          disabled
                           {...field}
                           {...register('phieuDKTiem.KetQuaKhamSL', {
                             validate: (value) => value !== '',

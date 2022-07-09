@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { CartState } from '~/components/cart/cartSlice'
 import {
   ChiTietPhieuDK,
@@ -244,7 +245,7 @@ export const taoDKTiem = async (
           MaVacXin: vacXin.MaVacXin,
           SoLuong: 1,
           MaPhieuTiem: MaPhieuTiem,
-          TinhTrang: '',
+          TinhTrang: 'Có sẵn',
           GhiChu: '',
         })
       }
@@ -323,4 +324,53 @@ export const taoPhieuTiem = async (phieuTiem: PhieuTiem) => {
       notFound: true,
     }
   }
+}
+
+export const duyetPhieuDKTiem = async (MaPhieuDK: number) => {
+  try {
+    const res = await fetch(`${apiUrl}/phieu-dk-tiem/${MaPhieuDK}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    })
+    const data = await res.json()
+    return data.phieuDKTiem
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true,
+    }
+  }
+}
+
+export const getDsChiTietPhieuDKTiem = async (MaPhieuDK: number) => {
+  const res = await fetch(
+    `${apiUrl}/chi-tiet-phieu-dk/phieu-dk-tiem/${MaPhieuDK}`
+  )
+  const data = await res.json()
+  const dsChiTietPhieuDKTiem: ChiTietPhieuDK[] = data.dsChiTietPhieuDKTiem
+  return dsChiTietPhieuDKTiem
+}
+
+export const autoCreateDsPhieuTiem = async (MaPhieuDK: number) => {
+  const dsChiTietPhieuDKTiem: ChiTietPhieuDK[] = await getDsChiTietPhieuDKTiem(
+    MaPhieuDK
+  )
+  let STT = 1
+  for (let item of dsChiTietPhieuDKTiem) {
+    await taoPhieuTiem({
+      MaPhieuTiem: 0,
+      MaPhieuDK: item.MaPhieuDK,
+      MaNhanVien: 1,
+      NgayTiem: dayjs(item.NgayTiem).format('YYYY-MM-DD'),
+      KetQuaKham: 'Đạt',
+      KetQuaSauTiem: 'Chưa có',
+      TrangThai: 'Đã khám',
+      STT,
+    })
+    STT = STT + 1
+  }
+  console.log(dsChiTietPhieuDKTiem)
 }

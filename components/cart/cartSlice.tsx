@@ -31,6 +31,10 @@ const cartSlice = createSlice({
         (item) => item.MaGoiTiem !== action.payload
       )
     },
+    resetCart: (state) => {
+      state.goiTiem = []
+      state.vaccines = []
+    },
   },
 })
 

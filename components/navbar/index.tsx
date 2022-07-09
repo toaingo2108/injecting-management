@@ -16,7 +16,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 // import AdbIcon from '@mui/icons-material/Adb'
 // component
-import Search from '~/components/search'
+// import Search from '~/components/search'
 import Header from '~/components/header'
 // data.js
 import { pages as pagesApp } from '~/components/navbar/data'
@@ -86,7 +86,7 @@ const Navbar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <Search />
+              {/* <Search /> */}
               {pagesApp.map((page) => (
                 <Link key={page.name} href={page.link}>
                   <MenuItem onClick={handleCloseNavMenu}>
@@ -137,7 +137,7 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Search />
+            {/* <Search /> */}
           </Box>
         </Toolbar>
       </Container>

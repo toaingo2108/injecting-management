@@ -1,6 +1,8 @@
 import { styled, alpha } from '@mui/material/styles'
 import { InputBase } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import { useAppDispatch, useAppSelector } from '~/redux/hook'
+import searchSlice from './searchSlice'
 
 const SearchWrapper = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -45,12 +47,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const Search = () => {
+  const valueSearch = useAppSelector((state) => state.search.value)
+  const dispatch = useAppDispatch()
+
   return (
     <SearchWrapper>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
       <StyledInputBase
+        value={valueSearch}
+        onChange={(e) =>
+          dispatch(searchSlice.actions.changeValueSearch(e.target.value))
+        }
         placeholder="Search…"
         inputProps={{ 'aria-label': 'search' }}
       />
