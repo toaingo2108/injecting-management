@@ -11,10 +11,6 @@ export const pages = [
     name: 'Phiếu đăng ký tiêm chủng',
     link: '/sheets',
   },
-  {
-    name: 'Trung tâm',
-    link: '/centers',
-  },
   // {
   //   name: 'Cẩm nang',
   //   link: '/blog',

@@ -1,16 +1,16 @@
 import {
-  // LocationOn,
+  LocationOn,
   // ContactSupport,
   Vaccines,
   Inventory,
 } from '@mui/icons-material'
 
 export const pages = [
-  // {
-  //   name: 'Tìm trung tâm',
-  //   icon: <LocationOn fontSize="small" />,
-  //   link: '/injections/search',
-  // },
+  {
+    name: 'Trung tâm',
+    icon: <LocationOn fontSize="small" />,
+    link: '/centers',
+  },
   {
     name: 'Tra cứu vắc xin',
     icon: <Vaccines fontSize="small" />,
