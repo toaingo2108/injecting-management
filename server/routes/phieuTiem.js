@@ -120,4 +120,31 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.put('/:MaPhieuTiem', async (req, res) => {
+  const { KetQuaSauTiem } = req.body
+  try {
+    let pool = await sql.connect(config)
+    const { recordset, output } = await pool.query(
+      `update PhieuTiem set KetQuaSauTiem = N'${KetQuaSauTiem}' output inserted.* where MaPhieuTiem = ${req.params.MaPhieuTiem}`
+    )
+    if (output.error) {
+      return res.status(400).json({
+        success: false,
+        message: output.error,
+      })
+    }
+
+    res.json({
+      success: true,
+      phieuTiem: recordset[0],
+    })
+  } catch (error) {
+    console.log(error.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi hệ thống',
+    })
+  }
+})
+
 module.exports = router

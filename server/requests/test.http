@@ -106,3 +106,11 @@ GET http://localhost:5000/api/hoa-don/phieu-dk-tiem/105
 
 ###
 GET http://localhost:5000/api/nhan-vien/trung-tam/all
+
+### 
+PUT http://localhost:5000/api/phieu-tiem/184
+Content-Type: application/json
+
+{
+    "KetQuaSauTiem": "Thành công"
+}

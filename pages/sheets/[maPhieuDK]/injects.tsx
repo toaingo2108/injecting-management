@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 import { GetServerSideProps, NextPage } from 'next'
 import Layout from '~/components/layout'
@@ -16,12 +17,13 @@ import { PhieuTiem } from '~/model'
 import { apiUrl } from '~/src/constants'
 import { v4 as uuidv4 } from 'uuid'
 import ListEmpty from '~/components/listEmpty'
-import { rowsPhieuTiem } from '~/src/utils'
+import { capNhatKetQuaPhieuTiem, rowsPhieuTiem } from '~/src/utils'
 import dayjs from 'dayjs'
 // import { useAppDispatch } from '~/redux/hook'
 // import modalSlice from '~/components/modal/modalSlice'
 // import ModalTaoPhieuTiem from '~/components/modalTaoPhieuTiem'
-import { Edit } from '@mui/icons-material'
+import { Check, DoDisturbOn } from '@mui/icons-material'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
@@ -52,6 +54,21 @@ interface Props {
 }
 const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
   // const dispatch = useAppDispatch()
+
+  const router = useRouter()
+
+  const handleUpdatePhieuTiem = async (
+    MaPhieuTiem: number,
+    KetQuaSauTiem: string
+  ) => {
+    const phieuTiem: PhieuTiem = await capNhatKetQuaPhieuTiem(
+      MaPhieuTiem,
+      KetQuaSauTiem
+    )
+    if (phieuTiem) {
+      router.push(router.asPath)
+    }
+  }
 
   return (
     <Layout
@@ -92,12 +109,39 @@ const SheetInjects: NextPage<Props> = ({ dsPhieuTiem }) => {
                     {dayjs(row.NgayTiem).format('DD-MM-YYYY')}
                   </TableCell>
                   <TableCell>{row.KetQuaKham}</TableCell>
-                  <TableCell>{row.KetQuaSauTiem}</TableCell>
+                  <TableCell>
+                    <Typography
+                      color={
+                        row.KetQuaSauTiem === 'Thành công'
+                          ? 'green'
+                          : row.KetQuaSauTiem === 'Thất bại'
+                          ? 'error'
+                          : 'GrayText'
+                      }
+                      fontWeight="bold"
+                    >
+                      {row.KetQuaSauTiem}
+                    </Typography>
+                  </TableCell>
                   <TableCell>{row.TrangThai}</TableCell>
                   <TableCell align="center">{row.STT}</TableCell>
                   <TableCell align="center">
-                    <IconButton size="small">
-                      <Edit />
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() =>
+                        handleUpdatePhieuTiem(row.MaPhieuTiem, 'Thành công')
+                      }
+                    >
+                      <Check />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        handleUpdatePhieuTiem(row.MaPhieuTiem, 'Thất bại')
+                      }
+                    >
+                      <DoDisturbOn color="error" />
                     </IconButton>
                   </TableCell>
                 </TableRow>

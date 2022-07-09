@@ -345,6 +345,29 @@ export const duyetPhieuDKTiem = async (MaPhieuDK: number) => {
   }
 }
 
+export const capNhatKetQuaPhieuTiem = async (
+  MaPhieuTiem: number,
+  KetQuaSauTiem: string
+) => {
+  try {
+    const res = await fetch(`${apiUrl}/phieu-tiem/${MaPhieuTiem}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+      body: JSON.stringify({ KetQuaSauTiem }),
+    })
+    const data = await res.json()
+    return data.phieuTiem
+  } catch (error) {
+    console.log(error)
+    return {
+      notFound: true,
+    }
+  }
+}
+
 export const getDsChiTietPhieuDKTiem = async (MaPhieuDK: number) => {
   const res = await fetch(
     `${apiUrl}/chi-tiet-phieu-dk/phieu-dk-tiem/${MaPhieuDK}`
